@@ -29,6 +29,24 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 
 		Parameters params = RunEnvironment.getInstance().getParameters();
 
+		int numLANs = 3;
+		for (int i = 0; i < numLANs; i++) {
+			var id = "LAN" + i;
+			LAN lan = new LAN(id);
+			context.add(lan);
+		}
+
+		int numPeople = 10;
+		for (int i = 0; i < numPeople; i++) {
+			var id = "Person" + i;
+			Person p = new Person(id);
+			context.add(p);
+		}
+		
+		for (Object obj : context) {
+			NdPoint pt = space.getLocation(obj);
+			grid.moveTo(obj, (int) pt.getX(), (int) pt.getY());
+		}
 		
 		//int maxTicks = params.getInteger("stopAt");
 		//RunEnvironment.getInstance().endAt(maxTicks);

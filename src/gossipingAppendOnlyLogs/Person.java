@@ -1,9 +1,9 @@
 package gossipingAppendOnlyLogs;
 
-public class LAN {
+public class Person {
 	public String ID;
 
-	public LAN(String id) {
+	public Person(String id) {
 		ID = id;
 	}
 }

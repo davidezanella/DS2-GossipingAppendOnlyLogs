@@ -6,19 +6,14 @@ import java.awt.Font;
 import repast.simphony.visualizationOGL2D.DefaultStyleOGL2D;
 import saf.v3d.scene.VSpatial;
 
-public class LANStyle extends DefaultStyleOGL2D {
+public class PersonStyle extends DefaultStyleOGL2D {
 	@Override
 	public Color getColor(Object o) {
-		Color color = Color.ORANGE;
-		
-		int alpha = 150;
-		
-		return new Color(color.getRed(), color.getGreen(), color.getBlue(), alpha);
+		return Color.BLACK;
 	}
 
 	public VSpatial getVSpatial(Object agent, VSpatial spatial) {
-		int radius = 5;
-		return shapeFactory.createCircle(radius, 30);
+		return shapeFactory.createCircle(1, 3);
 	}
 	
 	@Override
@@ -28,6 +23,6 @@ public class LANStyle extends DefaultStyleOGL2D {
 	
 	@Override
 	public float getScale(Object o) {
-		return 15f;
+		return 5f;
 	}
 }
