@@ -1,0 +1,6 @@
+*.log
+*.class
+Repast.settings
+output/
+*.txt
+
