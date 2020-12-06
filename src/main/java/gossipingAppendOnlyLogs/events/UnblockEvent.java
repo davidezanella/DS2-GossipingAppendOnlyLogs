@@ -8,4 +8,9 @@ public class UnblockEvent extends Event {
     public UnblockEvent(PersonPublicKey unblockedPerson) {
         this.unblockedPerson = unblockedPerson;
     }
+
+    @Override
+    protected EventContentHash hashContent() {
+        return new EventContentHash(unblockedPerson.hash());
+    }
 }

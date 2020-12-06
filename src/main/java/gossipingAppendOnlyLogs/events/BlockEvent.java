@@ -8,4 +8,9 @@ public class BlockEvent extends Event {
     public BlockEvent(PersonPublicKey blockedPerson) {
         this.blockedPerson = blockedPerson;
     }
+
+    @Override
+    protected EventContentHash hashContent() {
+        return new EventContentHash(blockedPerson.hash());
+    }
 }

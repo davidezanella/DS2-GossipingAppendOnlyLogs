@@ -1,5 +1,6 @@
 package gossipingAppendOnlyLogs.events;
 
+import gossipingAppendOnlyLogs.HashUtils;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 
 public class UnfollowEvent extends Event {
@@ -8,5 +9,10 @@ public class UnfollowEvent extends Event {
 
     public UnfollowEvent(PersonPublicKey unfollowedPerson) {
         this.unfollowedPerson = unfollowedPerson;
+    }
+
+    @Override
+    protected EventContentHash hashContent() {
+        return new EventContentHash(unfollowedPerson.hash());
     }
 }
