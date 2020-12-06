@@ -17,7 +17,7 @@ public class PersonStyle extends DefaultStyleOGL2D {
 	}
 
 	public VSpatial getVSpatial(Object agent, VSpatial spatial) {
-		return shapeFactory.createCircle(1, 3);
+		return shapeFactory.createCircle(2, 3);
 	}
 	
 	@Override

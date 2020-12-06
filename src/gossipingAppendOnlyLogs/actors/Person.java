@@ -34,8 +34,8 @@ public class Person {
 
     @ScheduledMethod(start = 1, interval = 1)
     public void onTick() {
-        moveOrStay();
-        synchronizeWithConnectedPeople();
+        //moveOrStay();
+        //synchronizeWithConnectedPeople();
     }
 
     private void moveOrStay() {
@@ -75,7 +75,7 @@ public class Person {
         }
 
         public boolean canConnect(){
-            return lan.maximumDistance < distance;
+            return distance < lan.maximumDistance;
         }
     }
 

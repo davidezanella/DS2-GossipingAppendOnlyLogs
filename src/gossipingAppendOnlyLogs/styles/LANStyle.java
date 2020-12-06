@@ -3,6 +3,7 @@ package gossipingAppendOnlyLogs.styles;
 import java.awt.Color;
 import java.awt.Font;
 
+import gossipingAppendOnlyLogs.actors.LAN;
 import repast.simphony.visualizationOGL2D.DefaultStyleOGL2D;
 import saf.v3d.scene.VSpatial;
 
@@ -17,8 +18,8 @@ public class LANStyle extends DefaultStyleOGL2D {
 	}
 
 	public VSpatial getVSpatial(Object agent, VSpatial spatial) {
-		int radius = 5;
-		return shapeFactory.createCircle(radius, 30);
+		var lan = (LAN) agent;
+		return shapeFactory.createCircle((float) lan.maximumDistance, 30);
 	}
 	
 	@Override
