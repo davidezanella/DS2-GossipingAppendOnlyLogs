@@ -1,5 +1,7 @@
-package gossipingAppendOnlyLogs;
+package gossipingAppendOnlyLogs.models;
 
+import gossipingAppendOnlyLogs.actors.LAN;
+import gossipingAppendOnlyLogs.actors.Person;
 import repast.simphony.context.Context;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;

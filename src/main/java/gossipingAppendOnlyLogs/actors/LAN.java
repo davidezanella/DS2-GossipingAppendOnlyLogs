@@ -1,4 +1,4 @@
-package gossipingAppendOnlyLogs;
+package gossipingAppendOnlyLogs.actors;
 
 public class LAN {
 	public String ID;

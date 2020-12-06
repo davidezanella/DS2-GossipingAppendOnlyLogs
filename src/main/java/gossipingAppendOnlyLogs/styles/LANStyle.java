@@ -1,4 +1,4 @@
-package gossipingAppendOnlyLogs.Styles;
+package gossipingAppendOnlyLogs.styles;
 
 import java.awt.Color;
 import java.awt.Font;
