@@ -5,9 +5,11 @@ import gossipingAppendOnlyLogs.actors.Person;
 import repast.simphony.context.Context;
 import repast.simphony.query.space.grid.GridCellNgh;
 import repast.simphony.space.continuous.ContinuousSpace;
+import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.grid.Grid;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -28,8 +30,8 @@ public class RepastUtils {
     }
 
     private static <T> List<T> getAllActorsInGrid(Object actor, Class<T> clazz) {
-        if (grid == null) {
-            throw new IllegalStateException("'grid' has not been initialized");
+        if (space == null) {
+            throw new IllegalStateException("'space' has not been initialized");
         }
         var pt = grid.getLocation(actor);
         var extentX = grid.getDimensions().getWidth() / 2;
@@ -52,5 +54,13 @@ public class RepastUtils {
     public static void moveTo(Object obj, double x, double y) {
         space.moveTo(obj, x, y);
         grid.moveTo(obj, (int) x, (int) y);
+    }
+
+    public static NdPoint getRandomPoint() {
+        var random = ThreadLocalRandom.current();
+        return new NdPoint(
+                random.nextInt((int) space.getDimensions().getWidth()),
+                random.nextInt((int) space.getDimensions().getHeight())
+        );
     }
 }

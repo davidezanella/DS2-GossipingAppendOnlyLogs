@@ -20,17 +20,9 @@ public class RandomMotionStrategy extends MotionStrategy {
     @Override
     public void onTick() {
         if (targetPoint == null) {
-            pickRandomTarget();
-        } else {
-            moveTowardsTarget();
+            targetPoint = RepastUtils.getRandomPoint();
         }
-    }
-
-    private void pickRandomTarget() {
-        targetPoint = new NdPoint(
-                random.nextInt(50),
-                random.nextInt(50)
-        );
+        moveTowardsTarget();
     }
 
     private void moveTowardsTarget() {
