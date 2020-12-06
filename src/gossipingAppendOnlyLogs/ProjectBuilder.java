@@ -19,42 +19,79 @@ import repast.simphony.space.grid.SimpleGridAdder;
 import repast.simphony.space.grid.WrapAroundBorders;
 
 public class ProjectBuilder implements ContextBuilder<Object> {
-	@Override
-	public Context<Object> build(Context<Object> context) {
-		context.setId("GossipingAppendOnlyLogs");
-		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
-		ContinuousSpace<Object> space = spaceFactory.createContinuousSpace("space", context,
-				new RandomCartesianAdder<Object>(), new repast.simphony.space.continuous.WrapAroundBorders(), 50, 50);
-		GridFactory gridFactory = GridFactoryFinder.createGridFactory(null);
-		Grid<Object> grid = gridFactory.createGrid("grid", context, new GridBuilderParameters<Object>(
-				new WrapAroundBorders(), new SimpleGridAdder<Object>(), true, 50, 50));
 
-		RepastUtils.grid = grid;
+    private static final int GRID_SIZE = 50;
 
-		Parameters params = RunEnvironment.getInstance().getParameters();
+    private final ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
+    private final GridFactory gridFactory = GridFactoryFinder.createGridFactory(null);
 
-		int numLANs = 3;
-		for (int i = 0; i < numLANs; i++) {
-			var id = "LAN" + i;
-			LAN lan = new LAN(id);
-			context.add(lan);
-		}
+    private Context<Object> context;
 
-		int numPeople = 10;
-		for (int i = 0; i < numPeople; i++) {
-			var id = "Person" + i;
-			Person p = new Person(id, CryptographyUtils.generateKeys());
-			context.add(p);
-		}
-		
-		for (Object obj : context) {
-			NdPoint pt = space.getLocation(obj);
-			grid.moveTo(obj, (int) pt.getX(), (int) pt.getY());
-		}
-		
-		//int maxTicks = params.getInteger("stopAt");
-		//RunEnvironment.getInstance().endAt(maxTicks);
+    private ContinuousSpace<Object> space;
 
-		return context;
-	}
+    private Grid<Object> grid;
+
+    @Override
+    public Context<Object> build(Context<Object> context) {
+        this.context = context;
+        context.setId("GossipingAppendOnlyLogs");
+
+        this.space = spaceFactory.createContinuousSpace(
+                "space",
+                context,
+                new RandomCartesianAdder<Object>(),
+                new repast.simphony.space.continuous.WrapAroundBorders(),
+                GRID_SIZE,
+                GRID_SIZE
+        );
+        this.grid = gridFactory.createGrid(
+                "grid",
+                context,
+                new GridBuilderParameters<Object>(new WrapAroundBorders(), new SimpleGridAdder<Object>(),
+                        true,
+                        GRID_SIZE,
+                        GRID_SIZE
+                )
+        );
+
+        RepastUtils.grid = grid;
+        RepastUtils.context = context;
+        RepastUtils.space = space;
+
+        var params = RunEnvironment.getInstance().getParameters();
+
+        createLANs(params);
+        createPeople(params);
+        randomlyMoveAllAgents();
+
+        //int maxTicks = params.getInteger("stopAt");
+        //RunEnvironment.getInstance().endAt(maxTicks);
+
+        return context;
+    }
+
+    private void createLANs(Parameters params){
+        int numLANs = 3;
+        for (int i = 0; i < numLANs; i++) {
+            var id = "LAN" + i;
+            LAN lan = new LAN(id);
+            context.add(lan);
+        }
+    }
+
+    private void createPeople(Parameters params) {
+        int numPeople = 10;
+        for (int i = 0; i < numPeople; i++) {
+            var id = "Person" + i;
+            Person p = new Person(id, CryptographyUtils.generateKeys());
+            context.add(p);
+        }
+    }
+
+    private void randomlyMoveAllAgents() {
+        for (Object obj : context) {
+            NdPoint pt = space.getLocation(obj);
+            RepastUtils.moveTo(obj, pt.getX(), pt.getY());
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package gossipingAppendOnlyLogs.models;
 
 import gossipingAppendOnlyLogs.events.Event;
-import gossipingAppendOnlyLogs.events.EventHash;
 import gossipingAppendOnlyLogs.events.StreamEvent;
 
 import java.util.ArrayList;

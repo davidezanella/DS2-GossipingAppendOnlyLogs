@@ -4,13 +4,13 @@ import gossipingAppendOnlyLogs.RepastUtils;
 import gossipingAppendOnlyLogs.models.PersonKeys;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 import gossipingAppendOnlyLogs.models.Store;
+import gossipingAppendOnlyLogs.motion.MotionStrategy;
+import gossipingAppendOnlyLogs.motion.RandomMotionStrategy;
 import gossipingAppendOnlyLogs.synchronization.OpenModelSynchronizationStrategy;
 import gossipingAppendOnlyLogs.synchronization.SynchronizationStrategy;
 import repast.simphony.engine.schedule.ScheduledMethod;
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.emptySet;
 
@@ -23,6 +23,8 @@ public class Person {
 
     private final Store store = new Store();
 
+    private final MotionStrategy motionStrategy = new RandomMotionStrategy(this);
+
     public Person(String id, PersonKeys keys) {
         this.id = id;
         this.keys = keys;
@@ -34,7 +36,7 @@ public class Person {
 
     @ScheduledMethod(start = 1, interval = 1)
     public void onTick() {
-        //moveOrStay();
+        motionStrategy.onTick();
         //synchronizeWithConnectedPeople();
     }
 

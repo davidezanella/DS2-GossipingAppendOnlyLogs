@@ -1,7 +1,5 @@
 package gossipingAppendOnlyLogs;
 
-import gossipingAppendOnlyLogs.events.Event;
-import gossipingAppendOnlyLogs.events.EventSignature;
 import gossipingAppendOnlyLogs.models.PersonKeys;
 import gossipingAppendOnlyLogs.models.PersonPrivateKey;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
@@ -9,7 +7,6 @@ import gossipingAppendOnlyLogs.models.PersonPublicKey;
 import javax.crypto.Cipher;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;

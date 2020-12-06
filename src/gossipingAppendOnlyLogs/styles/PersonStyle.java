@@ -1,12 +1,10 @@
 package gossipingAppendOnlyLogs.styles;
 
-import java.awt.Color;
-import java.awt.Font;
-
-import gossipingAppendOnlyLogs.actors.LAN;
 import gossipingAppendOnlyLogs.actors.Person;
 import repast.simphony.visualizationOGL2D.DefaultStyleOGL2D;
 import saf.v3d.scene.VSpatial;
+
+import java.awt.*;
 
 public class PersonStyle extends DefaultStyleOGL2D {
 	@Override

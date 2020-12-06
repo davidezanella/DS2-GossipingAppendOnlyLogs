@@ -1,6 +1,5 @@
 package gossipingAppendOnlyLogs.events;
 
-import gossipingAppendOnlyLogs.HashUtils;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 
 public class UnfollowEvent extends Event {

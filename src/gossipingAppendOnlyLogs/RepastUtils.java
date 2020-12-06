@@ -2,7 +2,9 @@ package gossipingAppendOnlyLogs;
 
 import gossipingAppendOnlyLogs.actors.LAN;
 import gossipingAppendOnlyLogs.actors.Person;
+import repast.simphony.context.Context;
 import repast.simphony.query.space.grid.GridCellNgh;
+import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 
 import java.util.List;
@@ -13,11 +15,15 @@ public class RepastUtils {
 
     public static Grid<Object> grid;
 
-    public static List<LAN> getAllLANsInGrid(Object actor){
+    public static Context<Object> context;
+
+    public static ContinuousSpace<Object> space;
+
+    public static List<LAN> getAllLANsInGrid(Object actor) {
         return getAllActorsInGrid(actor, LAN.class);
     }
 
-    public static List<Person> getAllPeopleInGrid(Object actor){
+    public static List<Person> getAllPeopleInGrid(Object actor) {
         return getAllActorsInGrid(actor, Person.class);
     }
 
@@ -37,9 +43,14 @@ public class RepastUtils {
     }
 
     public static double getDistance(Person person, LAN lan) {
-        return grid.getDistance(
-                grid.getLocation(person),
-                grid.getLocation(lan)
+        return space.getDistance(
+                space.getLocation(person),
+                space.getLocation(lan)
         );
+    }
+
+    public static void moveTo(Object obj, double x, double y) {
+        space.moveTo(obj, x, y);
+        grid.moveTo(obj, (int) x, (int) y);
     }
 }

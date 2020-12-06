@@ -1,6 +1,5 @@
 package gossipingAppendOnlyLogs.events;
 
-import gossipingAppendOnlyLogs.CryptographyUtils;
 import gossipingAppendOnlyLogs.models.PersonKeys;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 
