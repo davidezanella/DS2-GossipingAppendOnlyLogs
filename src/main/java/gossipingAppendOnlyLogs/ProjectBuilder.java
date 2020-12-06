@@ -1,4 +1,4 @@
-package gossipingAppendOnlyLogs.models;
+package gossipingAppendOnlyLogs;
 
 import gossipingAppendOnlyLogs.actors.LAN;
 import gossipingAppendOnlyLogs.actors.Person;
@@ -41,7 +41,7 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 		int numPeople = 10;
 		for (int i = 0; i < numPeople; i++) {
 			var id = "Person" + i;
-			Person p = new Person(id);
+			Person p = new Person(id, CryptographyUtils.generateKeys());
 			context.add(p);
 		}
 		

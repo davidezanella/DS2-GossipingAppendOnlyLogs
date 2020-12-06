@@ -1,6 +1,8 @@
 package gossipingAppendOnlyLogs.models;
 
 import gossipingAppendOnlyLogs.events.Event;
+import gossipingAppendOnlyLogs.events.EventHash;
+import gossipingAppendOnlyLogs.events.StreamEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,19 +16,29 @@ public class Log {
         this.id = id;
     }
 
-    public int getLast() {
-        return 0;
+    public int getHeight() {
+        return events.size();
     }
 
     public List<Event> getEvents(int start, int end) {
-        return new ArrayList<>();
+        throw new RuntimeException("not implemented yet");
     }
 
     public void update (List<Event> remoteEvents) {
-
+        throw new RuntimeException("not implemented yet");
     }
 
     public void update(List<Event> localEvents, PersonPrivateKey privateKey) {
+        throw new RuntimeException("not implemented yet");
+    }
 
+    public void addContent(PersonKeys keysOfLogOwner, String content) {
+        appendEvent(keysOfLogOwner, new StreamEvent(content));
+    }
+
+    protected void appendEvent(PersonKeys keysOfLogOwner, Event event) {
+        var previousHash = events.isEmpty() ? null : events.get(events.size() - 1).hash();
+        event.sign(keysOfLogOwner, previousHash);
+        events.add(event);
     }
 }

@@ -3,7 +3,10 @@ package gossipingAppendOnlyLogs.events;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 
 public class UnfollowEvent extends Event {
-    public UnfollowEvent(PersonPublicKey creatorId, EventHash previousEventHash, int index) {
-        super(creatorId, previousEventHash, index);
+
+    public final PersonPublicKey unfollowedPerson;
+
+    public UnfollowEvent(PersonPublicKey unfollowedPerson) {
+        this.unfollowedPerson = unfollowedPerson;
     }
 }

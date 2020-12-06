@@ -16,15 +16,15 @@ public class Store {
     }
 
     public void remove(PersonPublicKey id) {
-        throw new RuntimeException("not implemented yet");
+        logs.remove(id);
     }
 
     public Log get(PersonPublicKey id) {
-        throw new RuntimeException("not implemented yet");
+        return logs.get(id);
     }
 
     public Set<PersonPublicKey> getIds() {
-        throw new RuntimeException("not implemented yet");
+        return logs.keySet();
     }
 
     public Set<Frontier> getFrontiers(Set<PersonPublicKey> ids) {
