@@ -3,21 +3,21 @@
   <type>2D</type>
   <styles>
     <entry>
-      <string>gossipingAppendOnlyLogs.Person</string>
-      <string>gossipingAppendOnlyLogs.Styles.PersonStyle</string>
+      <string>gossipingAppendOnlyLogs.actors.Person</string>
+      <string>gossipingAppendOnlyLogs.styles.PersonStyle</string>
     </entry>
     <entry>
-      <string>gossipingAppendOnlyLogs.LAN</string>
-      <string>gossipingAppendOnlyLogs.Styles.LANStyle</string>
+      <string>gossipingAppendOnlyLogs.actors.LAN</string>
+      <string>gossipingAppendOnlyLogs.styles.LANStyle</string>
     </entry>
   </styles>
   <editedStyles>
     <entry>
-      <string>gossipingAppendOnlyLogs.Person</string>
+      <string>gossipingAppendOnlyLogs.actors.Person</string>
       <null/>
     </entry>
     <entry>
-      <string>gossipingAppendOnlyLogs.LAN</string>
+      <string>gossipingAppendOnlyLogs.actors.LAN</string>
       <null/>
     </entry>
   </editedStyles>
@@ -38,11 +38,11 @@
   <layoutInterval>0</layoutInterval>
   <layerOrder>
     <entry>
-      <string>gossipingAppendOnlyLogs.Person</string>
+      <string>gossipingAppendOnlyLogs.actors.Person</string>
       <int>1</int>
     </entry>
     <entry>
-      <string>gossipingAppendOnlyLogs.LAN</string>
+      <string>gossipingAppendOnlyLogs.actors.LAN</string>
       <int>0</int>
     </entry>
   </layerOrder>

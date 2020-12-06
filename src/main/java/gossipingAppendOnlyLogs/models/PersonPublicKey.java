@@ -6,7 +6,7 @@ import java.security.PublicKey;
 import java.util.Base64;
 
 public class PersonPublicKey {
-
+	
     public final PublicKey key;
 
     public PersonPublicKey(PublicKey key) {

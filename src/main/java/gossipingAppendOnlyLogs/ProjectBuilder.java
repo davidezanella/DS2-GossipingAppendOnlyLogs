@@ -29,6 +29,8 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 		Grid<Object> grid = gridFactory.createGrid("grid", context, new GridBuilderParameters<Object>(
 				new WrapAroundBorders(), new SimpleGridAdder<Object>(), true, 50, 50));
 
+		RepastUtils.grid = grid;
+
 		Parameters params = RunEnvironment.getInstance().getParameters();
 
 		int numLANs = 3;

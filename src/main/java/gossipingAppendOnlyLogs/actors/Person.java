@@ -1,5 +1,6 @@
 package gossipingAppendOnlyLogs.actors;
 
+import gossipingAppendOnlyLogs.RepastUtils;
 import gossipingAppendOnlyLogs.models.PersonKeys;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 import gossipingAppendOnlyLogs.models.Store;
@@ -7,7 +8,9 @@ import gossipingAppendOnlyLogs.synchronization.OpenModelSynchronizationStrategy;
 import gossipingAppendOnlyLogs.synchronization.SynchronizationStrategy;
 import repast.simphony.engine.schedule.ScheduledMethod;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.emptySet;
 
@@ -51,7 +54,29 @@ public class Person {
         return lan != null ? lan.getConnectedPeople() : emptySet();
     }
 
-    private LAN getConnectedLAN() {
-        throw new RuntimeException("not implemented yet");
+    public LAN getConnectedLAN() {
+        return RepastUtils
+                .getAllLANsInGrid(this)
+                .stream()
+                .map(LanWithDistance::new)
+                .filter(LanWithDistance::canConnect)
+                .min((a, b) -> ((int)(a.distance - b.distance)))
+                .map(lanWithDistance -> lanWithDistance.lan)
+                .orElse(null);
     }
+
+    private class LanWithDistance {
+        final LAN lan;
+        final double distance;
+
+        public LanWithDistance(LAN lan) {
+            this.lan = lan;
+            this.distance = RepastUtils.getDistance(Person.this, lan);
+        }
+
+        public boolean canConnect(){
+            return lan.maximumDistance < distance;
+        }
+    }
+
 }
