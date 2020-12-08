@@ -64,8 +64,8 @@ public class ProjectBuilder implements ContextBuilder<Object> {
         createPeople(params);
         randomlyMoveAllAgents();
 
-        //int maxTicks = params.getInteger("stopAt");
-        //RunEnvironment.getInstance().endAt(maxTicks);
+        int maxTicks = params.getInteger("stopAt");
+        RunEnvironment.getInstance().endAt(maxTicks);
 
         return context;
     }

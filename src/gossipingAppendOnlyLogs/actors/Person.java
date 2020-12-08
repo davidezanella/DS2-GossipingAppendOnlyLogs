@@ -1,12 +1,12 @@
 package gossipingAppendOnlyLogs.actors;
 
 import gossipingAppendOnlyLogs.RepastUtils;
+import gossipingAppendOnlyLogs.Utils;
 import gossipingAppendOnlyLogs.models.PersonKeys;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 import gossipingAppendOnlyLogs.models.Store;
 import gossipingAppendOnlyLogs.motion.MotionStrategy;
 import gossipingAppendOnlyLogs.motion.RandomMotionStrategy;
-import gossipingAppendOnlyLogs.synchronization.OpenModelSynchronizationStrategy;
 import gossipingAppendOnlyLogs.synchronization.SynchronizationStrategy;
 import repast.simphony.engine.schedule.ScheduledMethod;
 
@@ -19,7 +19,7 @@ public class Person {
 
     private final PersonKeys keys;
 
-    private final SynchronizationStrategy synchronizationStrategy = new OpenModelSynchronizationStrategy();
+    private final SynchronizationStrategy synchronizationStrategy = Utils.getCorrectStategy();
 
     private final Store store = new Store();
 
