@@ -26,4 +26,12 @@ public abstract class Event {
     public boolean isSigned() {
         return signature != null;
     }
+
+    public PersonPublicKey getCreatorId() {
+        return creatorId;
+    }
+
+    public EventHash getPreviousEventHash() {
+        return previousEventHash;
+    }
 }
