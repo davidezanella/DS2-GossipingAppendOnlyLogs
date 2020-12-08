@@ -24,6 +24,8 @@ public class Log {
 	}
 
 	public List<Event> getEvents(int start, int end) {
+		if (events.size() == 0)
+			return new ArrayList<Event>();
 		return events.subList(start, end);
 	}
 

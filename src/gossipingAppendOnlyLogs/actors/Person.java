@@ -48,7 +48,7 @@ public class Person {
         getConnectedPeople()
                 .stream()
                 .filter(person -> person != this)
-                .forEach(person -> synchronizationStrategy.synchronize(this.store, person.store));
+                .forEach(person -> synchronizationStrategy.synchronize(this.store, person.store, this.getPublicKey(), person.getPublicKey()));
     }
 
     private Set<Person> getConnectedPeople(){

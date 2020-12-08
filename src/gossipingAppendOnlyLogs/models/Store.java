@@ -73,7 +73,7 @@ public class Store {
 		}
 	}
 
-	public List<PersonPublicKey> getLogsFollowedBy(PersonPublicKey id) {
+	public Set<PersonPublicKey> getLogsFollowedBy(PersonPublicKey id) {
 		var log = logs.get(id);
 		var events = log.getEvents(0, log.getLast());
 		
@@ -91,12 +91,12 @@ public class Store {
 			// I'm currently following it
 			return numUnfollow == 0;
 		}).map(e -> e.followedPerson)
-				.collect(Collectors.toList());
+				.collect(Collectors.toSet());
 
 		return peopleFollowing;
 	}
 
-	public List<PersonPublicKey> getLogsBlockedBy(PersonPublicKey id) {
+	public Set<PersonPublicKey> getLogsBlockedBy(PersonPublicKey id) {
 		var log = logs.get(id);
 		var events = log.getEvents(0, log.getLast());
 		
@@ -114,7 +114,7 @@ public class Store {
 			// he's now blocked
 			return numUnblocked == 0;
 		}).map(e -> e.blockedPerson)
-				.collect(Collectors.toList());
+				.collect(Collectors.toSet());
 
 		return peopleBlocked;
 	}
