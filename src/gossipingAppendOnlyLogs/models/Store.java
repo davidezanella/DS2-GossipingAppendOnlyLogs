@@ -1,11 +1,17 @@
 package gossipingAppendOnlyLogs.models;
 
+import gossipingAppendOnlyLogs.events.BlockEvent;
 import gossipingAppendOnlyLogs.events.Event;
+import gossipingAppendOnlyLogs.events.FollowEvent;
+import gossipingAppendOnlyLogs.events.UnblockEvent;
+import gossipingAppendOnlyLogs.events.UnfollowEvent;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Store {
 
@@ -68,10 +74,48 @@ public class Store {
 	}
 
 	public List<PersonPublicKey> getLogsFollowedBy(PersonPublicKey id) {
-		throw new RuntimeException("not implemented yet");
+		var log = logs.get(id);
+		var events = log.getEvents(0, log.getLast());
+		
+		var following = events.stream().filter(e -> (e instanceof FollowEvent)).map(e -> (FollowEvent)e);
+		var unfollowed = events.stream().filter(e -> (e instanceof UnfollowEvent)).map(e -> (UnfollowEvent)e);
+		
+		// TODO: fix adding index into events?
+		var peopleFollowing = following.filter(e -> {
+			int followIdx = events.indexOf(e);
+			var numUnfollow = unfollowed.filter(u -> u.unfollowedPerson.equals(e.followedPerson)).filter(u -> {
+				int unfollowIdx = events.indexOf(e);
+				// stopped following that person later than starting following it
+				return unfollowIdx > followIdx;
+			}).count();
+			// I'm currently following it
+			return numUnfollow == 0;
+		}).map(e -> e.followedPerson)
+				.collect(Collectors.toList());
+
+		return peopleFollowing;
 	}
 
 	public List<PersonPublicKey> getLogsBlockedBy(PersonPublicKey id) {
-		throw new RuntimeException("not implemented yet");
+		var log = logs.get(id);
+		var events = log.getEvents(0, log.getLast());
+		
+		var blocked = events.stream().filter(e -> (e instanceof BlockEvent)).map(e -> (BlockEvent)e);
+		var unblocked = events.stream().filter(e -> (e instanceof UnblockEvent)).map(e -> (UnblockEvent)e);
+		
+		// TODO: fix adding index into events?
+		var peopleBlocked = blocked.filter(e -> {
+			int blockedIdx = events.indexOf(e);
+			var numUnblocked = unblocked.filter(u -> u.unblockedPerson.equals(e.blockedPerson)).filter(u -> {
+				int unblockedIdx = events.indexOf(e);
+				// unblocked that person later than starting blocking it
+				return unblockedIdx > blockedIdx;
+			}).count();
+			// he's now blocked
+			return numUnblocked == 0;
+		}).map(e -> e.blockedPerson)
+				.collect(Collectors.toList());
+
+		return peopleBlocked;
 	}
 }
