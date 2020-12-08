@@ -1,6 +1,10 @@
 package gossipingAppendOnlyLogs.actors;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
+
+import gossipingAppendOnlyLogs.RepastUtils;
 
 public class LAN {
 	public final String ID;
@@ -11,6 +15,17 @@ public class LAN {
 	}
 
 	public Set<Person> getConnectedPeople() {
-		throw new RuntimeException("not implemented yet");
+		var people = RepastUtils.getAllPeopleInGrid(this).stream()
+				.filter(p -> {
+					var lan = p.getConnectedLAN();
+					if (lan == null)
+						return false;
+					return lan.ID.equals(ID);
+				})
+				.toArray(Person[]::new);
+
+		Set<Person> set = new HashSet<>(); 
+		Collections.addAll(set, people); 
+		return set;
 	}
 }

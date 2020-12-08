@@ -37,7 +37,7 @@ public class Person {
     @ScheduledMethod(start = 1, interval = 1)
     public void onTick() {
         motionStrategy.onTick();
-        //synchronizeWithConnectedPeople();
+        synchronizeWithConnectedPeople();
     }
 
     private void moveOrStay() {
