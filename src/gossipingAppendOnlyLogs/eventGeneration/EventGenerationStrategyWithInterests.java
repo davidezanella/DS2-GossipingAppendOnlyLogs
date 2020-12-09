@@ -2,8 +2,10 @@ package gossipingAppendOnlyLogs.eventGeneration;
 
 import gossipingAppendOnlyLogs.actors.Person;
 import gossipingAppendOnlyLogs.events.StreamEvent;
+import gossipingAppendOnlyLogs.events.UnblockEvent;
 import gossipingAppendOnlyLogs.events.UnfollowEvent;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
+import gossipingAppendOnlyLogs.events.BlockEvent;
 import gossipingAppendOnlyLogs.events.Event;
 import gossipingAppendOnlyLogs.events.FollowEvent;
 import repast.simphony.engine.schedule.ScheduleParameters;
@@ -41,22 +43,21 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 		Boolean eventDone = false;
 		
 		while(!eventDone) {
-			if(eventChosen <= 4) {
+			Event event = null;
+			if(eventChosen <= 4)
 				//a followEvent is the most probable event type
-				Event event = createFollowEvent();
-				if(event != null)
-					person.addEventToPersonalLog(event);
+				event = createFollowEvent();
+			else if (eventChosen <= 7) 
+				event = createUnfollowEvent();
+			else if(eventChosen <= 8)
+				event = createBlockEvent();
+			else {
+				event = createUnblockEvent();
+			}
+			
+			if(event != null) {
+				person.addEventToPersonalLog(event);
 				eventDone = true;
-			} else if (eventChosen <= 7) {
-				//TODO: unfollowEvent
-				Event event = createUnfollowEvent();
-				if(event != null)
-					person.addEventToPersonalLog(event);
-				eventDone = true;
-			} else if(eventChosen <= 8) {
-				//TODO: block event
-			} else {
-				//TODO: unblock event
 			}
 			
 			//in the case that an event wasn't complete (e.g. unblock event when the person never
@@ -109,6 +110,7 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 			.getStore()
 			.getLogsFollowedBy(person.getPublicKey());
 		
+		// TODO: can I follow a person I've blocked?
 		Set <PersonPublicKey> blocked = person
 			.getStore()
 			.getLogsBlockedBy(person.getPublicKey());
@@ -126,6 +128,55 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 		}
 		
 		return new UnfollowEvent(persToUnfollow);
+	}
+	
+	protected BlockEvent createBlockEvent() {
+		PersonPublicKey persToBlock = null;
+		
+		//get a set with the pkeys of everyone
+		Set<PersonPublicKey> persons = RepastUtils
+	        .getAllPeopleInGrid(person)
+	        .stream()
+	        .map(availPers -> availPers.getPublicKey())
+	        .collect(Collectors.toSet());
+		
+		Set <PersonPublicKey> blocked = person
+			.getStore()
+			.getLogsBlockedBy(person.getPublicKey());
+		
+		persons.removeAll(blocked);
+		
+		int item = new Random().nextInt(persons.size()); // In real life, the Random object should be rather more shared than this
+		int i = 0;
+		
+		for(PersonPublicKey key : persons)
+		{
+		    if (i == item)
+		    	persToBlock = key;
+		    i++;
+		}
+		
+		return new BlockEvent(persToBlock);
+	}
+	
+	protected UnblockEvent createUnblockEvent() {
+		PersonPublicKey persToUnblock = null;
+		
+		Set <PersonPublicKey> blocked = person
+			.getStore()
+			.getLogsBlockedBy(person.getPublicKey());
+		
+		int item = new Random().nextInt(blocked.size()); // In real life, the Random object should be rather more shared than this
+		int i = 0;
+		
+		for(PersonPublicKey key : blocked)
+		{
+		    if (i == item)
+		    	persToUnblock = key;
+		    i++;
+		}
+		
+		return new UnblockEvent(persToUnblock);
 	}
 }
 
