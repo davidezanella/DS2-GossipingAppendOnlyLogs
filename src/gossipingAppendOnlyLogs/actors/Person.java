@@ -87,4 +87,8 @@ public class Person {
     public void addEventToPersonalLog(Event event){
     	store.get(keys.publicKey).appendEvent(keys, event);
 	}
+    
+    public Store getStore() {
+    	return this.store;
+    }
 }
