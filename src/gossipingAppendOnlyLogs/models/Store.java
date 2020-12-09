@@ -43,10 +43,12 @@ public class Store {
 		while (it.hasNext()) {
 			var item = it.next();
 			var log = logs.get(item.id);
-			var lastIndex = log.getLast();
-
-			if (lastIndex > item.last)
-				events.addAll(log.getEvents(item.last, lastIndex));
+			if(log != null) {
+				var lastIndex = log.getLast();
+	
+				if (lastIndex > item.last)
+					events.addAll(log.getEvents(item.last, lastIndex));
+			}
 		}
 
 		return events;
