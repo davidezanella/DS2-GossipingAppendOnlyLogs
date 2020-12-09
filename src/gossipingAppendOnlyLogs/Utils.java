@@ -6,7 +6,7 @@ import gossipingAppendOnlyLogs.synchronization.TransitiveInterestSynchronization
 import repast.simphony.engine.environment.RunEnvironment;
 
 public class Utils {
-	public static SynchronizationStrategy getCorrectStategy() {
+	public static SynchronizationStrategy getCorrectStrategy() {
 		var params = RunEnvironment.getInstance().getParameters();
 		var strategy = params.getString("synchronizationProtocol");
 

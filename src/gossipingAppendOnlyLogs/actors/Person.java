@@ -19,7 +19,7 @@ public class Person {
 
     private final PersonKeys keys;
 
-    private final SynchronizationStrategy synchronizationStrategy = Utils.getCorrectStategy();
+    private final SynchronizationStrategy synchronizationStrategy = Utils.getCorrectStrategy();
 
     private final Store store = new Store();
 
@@ -38,10 +38,6 @@ public class Person {
     public void onTick() {
         motionStrategy.onTick();
         synchronizeWithConnectedPeople();
-    }
-
-    private void moveOrStay() {
-        throw new RuntimeException("not implemented yet");
     }
 
     private void synchronizeWithConnectedPeople() {
