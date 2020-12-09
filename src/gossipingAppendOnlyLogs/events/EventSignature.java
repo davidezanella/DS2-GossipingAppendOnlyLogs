@@ -16,4 +16,9 @@ public class EventSignature {
 	public EventSignature(String signature) {
 		this.signature = signature;
 	}
+	
+	@Override
+	public String toString() {
+		return signature;
+	}
 }

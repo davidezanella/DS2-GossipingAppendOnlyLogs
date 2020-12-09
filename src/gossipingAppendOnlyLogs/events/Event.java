@@ -27,6 +27,10 @@ public abstract class Event {
         return signature != null;
     }
 
+    public EventSignature getSignature() {
+        return signature;
+    }
+
     public PersonPublicKey getCreatorId() {
         return creatorId;
     }
