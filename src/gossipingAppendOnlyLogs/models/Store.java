@@ -1,16 +1,8 @@
 package gossipingAppendOnlyLogs.models;
 
-import gossipingAppendOnlyLogs.events.BlockEvent;
-import gossipingAppendOnlyLogs.events.Event;
-import gossipingAppendOnlyLogs.events.FollowEvent;
-import gossipingAppendOnlyLogs.events.UnblockEvent;
-import gossipingAppendOnlyLogs.events.UnfollowEvent;
+import gossipingAppendOnlyLogs.events.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Store {

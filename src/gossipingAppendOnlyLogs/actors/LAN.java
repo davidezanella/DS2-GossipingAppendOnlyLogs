@@ -1,10 +1,10 @@
 package gossipingAppendOnlyLogs.actors;
 
+import gossipingAppendOnlyLogs.RepastUtils;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import gossipingAppendOnlyLogs.RepastUtils;
 
 public class LAN {
 	public final String ID;

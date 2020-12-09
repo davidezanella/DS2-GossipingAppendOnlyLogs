@@ -1,12 +1,14 @@
 package gossipingAppendOnlyLogs.actors;
 
 import gossipingAppendOnlyLogs.RepastUtils;
-import gossipingAppendOnlyLogs.Utils;
+import gossipingAppendOnlyLogs.StrategyUtils;
+import gossipingAppendOnlyLogs.eventGeneration.EventGenerationStrategy;
+import gossipingAppendOnlyLogs.events.Event;
+import gossipingAppendOnlyLogs.models.Log;
 import gossipingAppendOnlyLogs.models.PersonKeys;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 import gossipingAppendOnlyLogs.models.Store;
 import gossipingAppendOnlyLogs.motion.MotionStrategy;
-import gossipingAppendOnlyLogs.motion.RandomMotionStrategy;
 import gossipingAppendOnlyLogs.synchronization.SynchronizationStrategy;
 import repast.simphony.engine.schedule.ScheduledMethod;
 
@@ -19,16 +21,21 @@ public class Person {
 
     private final PersonKeys keys;
 
-    private final SynchronizationStrategy synchronizationStrategy = Utils.getCorrectStrategy();
+	private final Store store = new Store();
 
-    private final Store store = new Store();
-
-    private final MotionStrategy motionStrategy = new RandomMotionStrategy(this);
+    private final SynchronizationStrategy synchronizationStrategy = StrategyUtils.getCorrectStrategy();
+    private final MotionStrategy motionStrategy = StrategyUtils.getMotionStrategy(this);
+    private final EventGenerationStrategy eventGenerationStrategy = StrategyUtils.getEventGenerationStrategy(this);
 
     public Person(String id, PersonKeys keys) {
         this.id = id;
         this.keys = keys;
+        createPersonalLog();
     }
+
+    private void createPersonalLog() {
+		store.add(new Log(keys.publicKey));
+	}
 
     public PersonPublicKey getPublicKey() {
         return keys.publicKey;
@@ -77,4 +84,7 @@ public class Person {
         }
     }
 
+    public void addEventToPersonalLog(Event event){
+    	store.get(keys.publicKey).appendEvent(keys, event);
+	}
 }

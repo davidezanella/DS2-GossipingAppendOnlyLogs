@@ -1,8 +1,8 @@
 package gossipingAppendOnlyLogs.synchronization;
 
+import gossipingAppendOnlyLogs.models.Log;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 import gossipingAppendOnlyLogs.models.Store;
-import gossipingAppendOnlyLogs.models.Log;
 
 public class TransitiveInterestSynchronizationStrategy implements SynchronizationStrategy {
     @Override

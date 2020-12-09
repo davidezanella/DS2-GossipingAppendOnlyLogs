@@ -1,7 +1,6 @@
 package gossipingAppendOnlyLogs.models;
 
 import gossipingAppendOnlyLogs.events.Event;
-import gossipingAppendOnlyLogs.events.StreamEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,11 +47,7 @@ public class Log {
 		throw new RuntimeException("not implemented yet");
 	}
 
-	public void addContent(PersonKeys keysOfLogOwner, String content) {
-		appendEvent(keysOfLogOwner, new StreamEvent(content));
-	}
-
-	protected void appendEvent(PersonKeys keysOfLogOwner, Event event) {
+	public void appendEvent(PersonKeys keysOfLogOwner, Event event) {
 		var previousHash = events.isEmpty() ? null : events.get(events.size() - 1).hash();
 		event.sign(keysOfLogOwner, previousHash);
 		events.add(event);
