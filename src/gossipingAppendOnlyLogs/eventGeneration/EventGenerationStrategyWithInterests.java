@@ -4,6 +4,7 @@ import gossipingAppendOnlyLogs.actors.Person;
 import gossipingAppendOnlyLogs.events.StreamEvent;
 import gossipingAppendOnlyLogs.events.UnfollowEvent;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
+import gossipingAppendOnlyLogs.events.Event;
 import gossipingAppendOnlyLogs.events.FollowEvent;
 import repast.simphony.engine.schedule.ScheduleParameters;
 import gossipingAppendOnlyLogs.RepastUtils;
@@ -42,10 +43,16 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 		while(!eventDone) {
 			if(eventChosen <= 4) {
 				//a followEvent is the most probable event type
-				person.addEventToPersonalLog(createFollowEvent());
+				Event event = createFollowEvent();
+				if(event != null)
+					person.addEventToPersonalLog(event);
 				eventDone = true;
 			} else if (eventChosen <= 7) {
 				//TODO: unfollowEvent
+				Event event = createUnfollowEvent();
+				if(event != null)
+					person.addEventToPersonalLog(event);
+				eventDone = true;
 			} else if(eventChosen <= 8) {
 				//TODO: block event
 			} else {
