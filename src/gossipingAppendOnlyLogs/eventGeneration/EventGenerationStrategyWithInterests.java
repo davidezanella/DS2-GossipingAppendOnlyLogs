@@ -2,6 +2,7 @@ package gossipingAppendOnlyLogs.eventGeneration;
 
 import gossipingAppendOnlyLogs.actors.Person;
 import gossipingAppendOnlyLogs.events.StreamEvent;
+import gossipingAppendOnlyLogs.events.UnfollowEvent;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 import gossipingAppendOnlyLogs.events.FollowEvent;
 import repast.simphony.engine.schedule.ScheduleParameters;
@@ -58,7 +59,6 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 	}
 	
 	protected FollowEvent createFollowEvent() {
-		Random ran = new Random();
 		PersonPublicKey persToFollow = null;
 		
 		//get a set with the pkeys of everyone
@@ -92,6 +92,33 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 		}
 		
 		return new FollowEvent(persToFollow);
+	}
+	
+	protected UnfollowEvent createUnfollowEvent() {
+		PersonPublicKey persToUnfollow = null;
+		
+		//set with all already followed persons
+		Set <PersonPublicKey> following = person
+			.getStore()
+			.getLogsFollowedBy(person.getPublicKey());
+		
+		Set <PersonPublicKey> blocked = person
+			.getStore()
+			.getLogsBlockedBy(person.getPublicKey());
+		
+		following.removeAll(blocked);
+		
+		int item = new Random().nextInt(following.size()); // In real life, the Random object should be rather more shared than this
+		int i = 0;
+		
+		for(PersonPublicKey key : following)
+		{
+		    if (i == item)
+		        persToUnfollow = key;
+		    i++;
+		}
+		
+		return new UnfollowEvent(persToUnfollow);
 	}
 }
 
