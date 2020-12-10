@@ -9,12 +9,11 @@ import gossipingAppendOnlyLogs.events.BlockEvent;
 import gossipingAppendOnlyLogs.events.Event;
 import gossipingAppendOnlyLogs.events.FollowEvent;
 import repast.simphony.engine.schedule.ScheduleParameters;
+import repast.simphony.random.*;
 import gossipingAppendOnlyLogs.RepastUtils;
 
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.List;
 
 public class EventGenerationStrategyWithInterests extends EventGenerationStrategy {
 
@@ -38,8 +37,7 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 	protected void generateInterestEvent() {
 		//make a follow, unfollow, block or unblock event
 		//in order to make this more realistic these events don't have all the same probabilites
-		Random rand = new Random();
-		int eventChosen = rand.nextInt(10);
+		int eventChosen = RandomHelper.nextIntFromTo(0, 10);
 		Boolean eventDone = false;
 		
 		while(!eventDone) {
@@ -89,7 +87,7 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 		persons.removeAll(following);
 		persons.removeAll(blocked);
 		
-		int item = new Random().nextInt(persons.size()); // In real life, the Random object should be rather more shared than this
+		int item = RandomHelper.nextIntFromTo(0, persons.size()); // In real life, the Random object should be rather more shared than this
 		int i = 0;
 		
 		for(PersonPublicKey key : persons)
@@ -117,7 +115,7 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 		
 		following.removeAll(blocked);
 		
-		int item = new Random().nextInt(following.size()); // In real life, the Random object should be rather more shared than this
+		int item = RandomHelper.nextIntFromTo(0, following.size()); // In real life, the Random object should be rather more shared than this
 		int i = 0;
 		
 		for(PersonPublicKey key : following)
@@ -146,7 +144,7 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 		
 		persons.removeAll(blocked);
 		
-		int item = new Random().nextInt(persons.size()); // In real life, the Random object should be rather more shared than this
+		int item = RandomHelper.nextIntFromTo(0, persons.size()); // In real life, the Random object should be rather more shared than this
 		int i = 0;
 		
 		for(PersonPublicKey key : persons)
@@ -166,7 +164,7 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 			.getStore()
 			.getLogsBlockedBy(person.getPublicKey());
 		
-		int item = new Random().nextInt(blocked.size()); // In real life, the Random object should be rather more shared than this
+		int item = RandomHelper.nextIntFromTo(0, blocked.size()); // In real life, the Random object should be rather more shared than this
 		int i = 0;
 		
 		for(PersonPublicKey key : blocked)
