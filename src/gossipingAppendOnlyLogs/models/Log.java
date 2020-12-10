@@ -4,7 +4,6 @@ import gossipingAppendOnlyLogs.events.Event;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Log {
 	private final List<Event> events = new ArrayList<>();

@@ -13,8 +13,12 @@ import gossipingAppendOnlyLogs.synchronization.SynchronizationStrategy;
 import repast.simphony.engine.schedule.ScheduledMethod;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.emptySet;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Person {
     public final String id; // TODO: Do we need an ID? can we just use the public key, and make the toString show an hash?
@@ -23,9 +27,12 @@ public class Person {
 
 	private final Store store = new Store();
 
-    private final SynchronizationStrategy synchronizationStrategy = StrategyUtils.getCorrectStrategy();
+    private final SynchronizationStrategy synchronizationStrategy = StrategyUtils.getCorrectStrategy(this);
     private final MotionStrategy motionStrategy = StrategyUtils.getMotionStrategy(this);
     private final EventGenerationStrategy eventGenerationStrategy = StrategyUtils.getEventGenerationStrategy(this);
+    
+    private final List<Event> createdEvents = new ArrayList<Event>(); // for log purposes
+    public final List<Event> addedEvents = new ArrayList<Event>(); // for log purposes
 
     public Person(String id, PersonKeys keys) {
         this.id = id;
@@ -86,9 +93,34 @@ public class Person {
 
     public void addEventToPersonalLog(Event event){
     	store.get(keys.publicKey).appendEvent(keys, event);
+    	createdEvents.add(event);
 	}
     
     public Store getStore() {
     	return this.store;
+    }
+    
+    public String createdEvents() {
+    	List<String> eventsStrings = createdEvents.stream()
+    			.map(Event::toString)
+    			.collect(Collectors.toList());
+    	
+    	createdEvents.clear();
+    	
+    	return String.join(",", eventsStrings);
+    }
+    
+    public String arrivedEvents() {
+    	List<String> eventsStrings = addedEvents.stream()
+    			.map(Event::toString)
+    			.collect(Collectors.toList());
+
+    	addedEvents.clear();
+    	
+    	return String.join(",", eventsStrings);
+    }
+    
+    public String getId() {
+    	return id;
     }
 }

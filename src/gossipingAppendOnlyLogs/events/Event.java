@@ -38,4 +38,9 @@ public abstract class Event {
     public EventHash getPreviousEventHash() {
         return previousEventHash;
     }
+    
+    @Override
+    public String toString() {
+    	return hash().hash;
+    }
 }

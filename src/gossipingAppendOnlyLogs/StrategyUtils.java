@@ -14,14 +14,14 @@ import repast.simphony.engine.environment.RunEnvironment;
  * TODO: Maybe we use the Abstract Factory Pattern, but let's wait see how this file will grow
  */
 public class StrategyUtils {
-	public static SynchronizationStrategy getCorrectStrategy() {
+	public static SynchronizationStrategy getCorrectStrategy(Person person) {
 		var params = RunEnvironment.getInstance().getParameters();
 		var strategy = params.getString("synchronizationProtocol");
 
 		if (strategy.equals("OpenModel"))
-			return new OpenModelSynchronizationStrategy();
+			return new OpenModelSynchronizationStrategy(person);
 		else
-			return new TransitiveInterestSynchronizationStrategy();
+			return new TransitiveInterestSynchronizationStrategy(person);
 	}
 
 	public static MotionStrategy getMotionStrategy(Person person) {

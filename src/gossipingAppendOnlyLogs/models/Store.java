@@ -45,7 +45,7 @@ public class Store {
 			var log = logs.get(item.id);
 			if(log != null) {
 				var lastIndex = log.getLast();
-	
+
 				if (lastIndex > item.last)
 					events.addAll(log.getEvents(item.last, lastIndex));
 			}
@@ -56,6 +56,7 @@ public class Store {
 
 	public void update(List<Event> remoteEvents) {
 		for (var e : remoteEvents) {
+			// this if condition should be removed once Transient interest sync is fixed
 			if (logs.containsKey(e.getCreatorId())) {
 				// I'm interested only in log ids that I already know
 
