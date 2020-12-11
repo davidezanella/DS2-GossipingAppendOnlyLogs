@@ -25,7 +25,7 @@ public class Store {
 	}
 
 	public Set<PersonPublicKey> getIds() {
-		return logs.keySet();
+		return new HashSet<>(logs.keySet());
 	}
 
 	public Frontier getFrontier(Set<PersonPublicKey> ids) {
