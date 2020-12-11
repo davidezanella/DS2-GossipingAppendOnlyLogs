@@ -31,7 +31,7 @@ public class Store {
 	public Frontier getFrontier(Set<PersonPublicKey> ids) {
 		Frontier frontier = new Frontier();
 		for (var logKey : logs.keySet()) {
-			frontier.addFrontierItem(new FrontierItem(logs.get(logKey).id, logs.get(logKey).getLast()));
+			frontier.addFrontierItem(new FrontierItem(logKey, logs.get(logKey).getLast()));
 		}
 		return frontier;
 	}

@@ -20,6 +20,8 @@ public class RepastUtils {
     public static Context<Object> context;
 
     public static ContinuousSpace<Object> space;
+    
+    public static int lastEventId = -1; // used for logging purposes
 
     public static List<LAN> getAllLANsInGrid(Object actor) {
         return getAllActorsInGrid(actor, LAN.class);
@@ -62,5 +64,10 @@ public class RepastUtils {
                 random.nextInt((int) space.getDimensions().getWidth()),
                 random.nextInt((int) space.getDimensions().getHeight())
         );
+    }
+    
+    public static String getNewEventId() {
+    	lastEventId++;
+    	return "Event" + lastEventId;
     }
 }
