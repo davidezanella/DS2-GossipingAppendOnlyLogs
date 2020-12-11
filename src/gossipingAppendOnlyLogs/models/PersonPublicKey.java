@@ -20,4 +20,9 @@ public class PersonPublicKey {
     public String hash() {
         return HashUtils.hash(base64Encoded());
     }
+
+	@Override
+	public String toString() {
+		return hash().substring(0, 7);
+	}
 }

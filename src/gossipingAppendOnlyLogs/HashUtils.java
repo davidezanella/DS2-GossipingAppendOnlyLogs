@@ -11,9 +11,17 @@ public class HashUtils {
 		try {
 			var digest = MessageDigest.getInstance("SHA-256");
 			byte[] hash = digest.digest(toHash.getBytes(StandardCharsets.UTF_8));
-			return new String(hash, StandardCharsets.UTF_8);
+			return byteArrayToHex(hash);
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException("cannot compute SHA-256 hash", e);
 		}
+	}
+
+	private static String byteArrayToHex(byte[] a) {
+		var builder = new StringBuilder(a.length * 2);
+		for (byte b : a) {
+			builder.append(String.format("%02x", b));
+		}
+		return builder.toString();
 	}
 }
