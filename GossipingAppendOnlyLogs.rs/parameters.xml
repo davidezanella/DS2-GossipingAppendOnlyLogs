@@ -11,5 +11,11 @@
 		defaultValue="OpenModel" isReadOnly="false"
 		converter="repast.simphony.parameter.StringConverterFactory$StringStringConverter"
 		values="OpenModel TransitiveInterest" />
+	<parameter name="numLANs" displayName="Num LANs"
+		type="int" defaultValue="5" isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="numPeople" displayName="Num People"
+		type="int" defaultValue="15" isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
 
 </parameters>

@@ -71,7 +71,7 @@ public class ProjectBuilder implements ContextBuilder<Object> {
     }
 
     private void createLANs(Parameters params){
-        int numLANs = 3;
+        int numLANs = params.getInteger("numLANs");
         for (int i = 0; i < numLANs; i++) {
             var id = "LAN" + i;
             LAN lan = new LAN(id);
@@ -80,7 +80,7 @@ public class ProjectBuilder implements ContextBuilder<Object> {
     }
 
     private void createPeople(Parameters params) {
-        int numPeople = 10;
+        int numPeople = params.getInteger("numPeople");
         for (int i = 0; i < numPeople; i++) {
             var id = "Person" + i;
             Person p = new Person(id, CryptographyUtils.generateKeys());
