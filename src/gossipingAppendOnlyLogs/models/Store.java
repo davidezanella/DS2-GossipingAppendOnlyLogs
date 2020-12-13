@@ -71,24 +71,15 @@ public class Store {
 	public Set<PersonPublicKey> getLogsFollowedBy(PersonPublicKey id) {
 		var log = logs.get(id);
 		var events = log.getEvents(0, log.getLast());
-		
-		var following = events.stream().filter(e -> (e instanceof FollowEvent)).map(e -> (FollowEvent)e);
-		var unfollowed = events.stream().filter(e -> (e instanceof UnfollowEvent)).map(e -> (UnfollowEvent)e);
-		
-		// TODO: fix adding index into events?
-		var peopleFollowing = following.filter(e -> {
-			int followIdx = events.indexOf(e);
-			var numUnfollow = unfollowed.filter(u -> u.unfollowedPerson.equals(e.followedPerson)).filter(u -> {
-				int unfollowIdx = events.indexOf(e);
-				// stopped following that person later than starting following it
-				return unfollowIdx > followIdx;
-			}).count();
-			// I'm currently following it
-			return numUnfollow == 0;
-		}).map(e -> e.followedPerson)
-				.collect(Collectors.toSet());
-
-		return peopleFollowing;
+		var followed = new HashSet<PersonPublicKey>();
+		for (var event : events) {
+			if (event instanceof FollowEvent) {
+				followed.add(((FollowEvent) event).followedPerson);
+			} else if (event instanceof UnfollowEvent) {
+				followed.remove(((UnfollowEvent) event).unfollowedPerson);
+			}
+		}
+		return followed;
 	}
 
 	public Set<PersonPublicKey> getLogsBlockedBy(PersonPublicKey id) {
