@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class EventGenerationStrategyWithInterests extends EventGenerationStrategy {
 
-	protected EventGenerationStrategyWithInterests(Person person) {
+	public EventGenerationStrategyWithInterests(Person person) {
 		super(person);
 		var params = ScheduleParameters.createUniformProbabilityRepeating(10, 0, 100, 50, 1);
 		scheduler.schedule(params, this, "generateEvent");
@@ -29,13 +29,12 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 	 *posts new events and doesn't only follow/unfollow other members of the system
 	 */
 	@Override
-	protected void generateEvent() {
+	public void generateEvent() {
 		var event = new StreamEvent("Some content");
 		person.addEventToPersonalLog(event);
 	}
 
-
-	protected void generateInterestEvent() {
+	public void generateInterestEvent() {
 		// TODO: can we be stuck in a infinite loop?
 		Event event;
 		do {
@@ -135,7 +134,7 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 		if (persons.isEmpty()) {
 			throw new IllegalArgumentException("persons set is empty");
 		}
-		int item = RandomHelper.nextIntFromTo(0, persons.size());
+		int item = RandomHelper.nextIntFromTo(0, persons.size() - 1);
 		return new ArrayList<>(persons).get(item);
 	}
 }
