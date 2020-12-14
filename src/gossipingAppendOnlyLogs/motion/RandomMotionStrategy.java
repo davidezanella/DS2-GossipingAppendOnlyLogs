@@ -4,12 +4,7 @@ import gossipingAppendOnlyLogs.RepastUtils;
 import gossipingAppendOnlyLogs.actors.Person;
 import repast.simphony.space.continuous.NdPoint;
 
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
 public class RandomMotionStrategy extends MotionStrategy {
-
-    private final Random random = ThreadLocalRandom.current();
 
     public RandomMotionStrategy(Person person) {
         super(person);

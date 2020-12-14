@@ -4,12 +4,12 @@ import gossipingAppendOnlyLogs.actors.LAN;
 import gossipingAppendOnlyLogs.actors.Person;
 import repast.simphony.context.Context;
 import repast.simphony.query.space.grid.GridCellNgh;
+import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.grid.Grid;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -58,13 +58,12 @@ public class RepastUtils {
         grid.moveTo(obj, (int) x, (int) y);
     }
 
-    public static NdPoint getRandomPoint() {
-        var random = ThreadLocalRandom.current();
-        return new NdPoint(
-                random.nextInt((int) space.getDimensions().getWidth()),
-                random.nextInt((int) space.getDimensions().getHeight())
-        );
-    }
+	public static NdPoint getRandomPoint() {
+		return new NdPoint(
+				RandomHelper.nextIntFromTo(0, (int) space.getDimensions().getWidth() - 1),
+				RandomHelper.nextIntFromTo(0, (int) space.getDimensions().getHeight() - 1)
+		);
+	}
     
     public static String getNewEventId() {
     	lastEventId++;
