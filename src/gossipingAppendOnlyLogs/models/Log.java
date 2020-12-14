@@ -40,9 +40,9 @@ public class Log {
 		for (Event e : remoteEvents) {
 			if (e.getCreatorId().equals(id)) {
 				var alreadyPresent = events.stream().filter(x -> x.hash().equals(e.hash())).findFirst();
-				if (alreadyPresent == null) {
-					// we don't have this event yet					
-					if(events.get(events.size() - 1).hash().equals(e.getPreviousEventHash())) {
+				if (alreadyPresent.isEmpty()) {
+					// we don't have this event yet
+					if(events.isEmpty() || events.get(events.size() - 1).hash().equals(e.getPreviousEventHash())) {
 						// this event is compatible, so we can add it
 						events.add(e);
 					}
