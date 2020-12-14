@@ -28,11 +28,18 @@ public class Store {
 		return new HashSet<>(logs.keySet());
 	}
 
+	/**
+	 * get the current frontier of the store only for the specified ids (table 2 of paper)
+	 * @param ids ids to include in the frontier
+	 * @return
+	 */
 	public Frontier getFrontier(Set<PersonPublicKey> ids) {
-		Frontier frontier = new Frontier();
-		for (var logKey : logs.keySet()) {
-			frontier.addFrontierItem(new FrontierItem(logKey, logs.get(logKey).getLast()));
-		}
+		var frontier = new Frontier();
+		logs.entrySet()
+				.stream()
+				.filter(entry -> ids.contains(entry.getKey()))
+				.map(entry -> new FrontierItem(entry.getKey(), entry.getValue().getLast()))
+				.forEach(frontier::addFrontierItem);
 		return frontier;
 	}
 
