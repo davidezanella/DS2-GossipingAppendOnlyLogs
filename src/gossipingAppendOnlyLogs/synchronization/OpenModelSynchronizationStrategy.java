@@ -11,12 +11,10 @@ public class OpenModelSynchronizationStrategy extends SynchronizationStrategy {
 	}
 
 	public void synchronize(Store localStore, Store remoteStore, PersonPublicKey localId, PersonPublicKey remoteId) {
-		// add new log ids
-		createMissingLogs(localStore, remoteStore);
-		createMissingLogs(remoteStore, localStore);
+		createUnknownLogs(localStore, remoteStore);
 
-		// we should now update the stores
-		var frontier = localStore.getFrontier(localStore.getIds());
+		// we should now update the local store with the new events that the remote store knows
+		var frontier = localStore.getFrontier(remoteStore.getIds());
 		var news = remoteStore.getEventsSince(frontier);
 		localStore.update(news);
 		
@@ -24,11 +22,13 @@ public class OpenModelSynchronizationStrategy extends SynchronizationStrategy {
 		person.addedEvents.addAll(news);
 	}
 
-	private void createMissingLogs(Store source, Store dest) {
-		var remoteIds = dest.getIds();
-		remoteIds.removeAll(source.getIds());
-
-		remoteIds.stream().map(id -> new Log(id)).forEach(source::add);
-		System.out.println("Added " + remoteIds.size() + " new logs");
+	private void createUnknownLogs(Store local, Store remote) {
+		var knownIds = local.getIds();
+		remote.getIds()
+				.stream()
+				.filter(id -> !knownIds.contains(id))
+				.map(Log::new)
+				.forEach(local::add);
+		System.out.println("Added " + (local.getIds().size() - knownIds.size()) + " new logs");
 	}
 }
