@@ -1,16 +1,11 @@
 package gossipingAppendOnlyLogs.eventGeneration;
 
-import gossipingAppendOnlyLogs.actors.Person;
-import gossipingAppendOnlyLogs.events.StreamEvent;
-import gossipingAppendOnlyLogs.events.UnblockEvent;
-import gossipingAppendOnlyLogs.events.UnfollowEvent;
-import gossipingAppendOnlyLogs.models.PersonPublicKey;
-import gossipingAppendOnlyLogs.events.BlockEvent;
-import gossipingAppendOnlyLogs.events.Event;
-import gossipingAppendOnlyLogs.events.FollowEvent;
-import repast.simphony.engine.schedule.ScheduleParameters;
-import repast.simphony.random.*;
 import gossipingAppendOnlyLogs.RepastUtils;
+import gossipingAppendOnlyLogs.actors.Person;
+import gossipingAppendOnlyLogs.events.*;
+import gossipingAppendOnlyLogs.models.PersonPublicKey;
+import repast.simphony.engine.schedule.ScheduleParameters;
+import repast.simphony.random.RandomHelper;
 
 import java.util.ArrayList;
 import java.util.Set;

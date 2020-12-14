@@ -11,30 +11,25 @@ public class TransitiveInterestSynchronizationStrategy extends SynchronizationSt
 		super(person);
 	}
 
-	public void synchronize(Store localStore, Store remoteStore, PersonPublicKey localId, PersonPublicKey remoteId) {
-    	createMissingLogs(localStore, localId);
-    	createMissingLogs(remoteStore, remoteId);
+	public void synchronize(Store remoteStore, PersonPublicKey remoteId) {
+		createUnknownLogs(remoteStore);
 
-    	// we should now update the stores
-    	var frontier = localStore.getFrontier(localStore.getIds());
-    	var news = remoteStore.getEventsSince(frontier);
-    	localStore.update(news);
-		
+		// we should now update the stores
+		var frontier = localStore.getFrontier(localStore.getIds());
+		var news = remoteStore.getEventsSince(frontier);
+		localStore.update(news);
+
 		// save new events to a list for logging purposes
-		person.addedEvents.addAll(news);
-    }
+		local.addedEvents.addAll(news);
+	}
 
-	private void createMissingLogs(Store store, PersonPublicKey creatorId) {
-		// add missing following log ids
-    	var followingIds = store.getLogsFollowedBy(creatorId);
-    	followingIds.removeAll(store.getIds());
-
-    	followingIds.stream().map(id -> new Log(id)).forEach(store::add);
-    	
-    	// remove blocked log ids
-    	var blockedIds = store.getLogsBlockedBy(creatorId);
-    	blockedIds.retainAll(store.getIds());
-    	
-    	blockedIds.stream().forEach(store::remove);
+	protected void createUnknownLogs(Store remoteStore) {
+		var knownIds = localStore.getIds();
+		remoteStore.getIds()
+				.stream()
+				.filter(id -> !knownIds.contains(id))
+				.map(Log::new)
+				.forEach(localStore::add);
+		System.out.println("Added " + (localStore.getIds().size() - knownIds.size()) + " new logs");
 	}
 }

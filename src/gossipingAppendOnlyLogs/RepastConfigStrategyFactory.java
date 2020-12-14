@@ -1,9 +1,14 @@
 package gossipingAppendOnlyLogs;
 
 import gossipingAppendOnlyLogs.actors.Person;
-import gossipingAppendOnlyLogs.eventGeneration.*;
-import gossipingAppendOnlyLogs.motion.*;
-import gossipingAppendOnlyLogs.synchronization.*;
+import gossipingAppendOnlyLogs.eventGeneration.EventGenerationStrategy;
+import gossipingAppendOnlyLogs.eventGeneration.EventGenerationStrategyWithInterests;
+import gossipingAppendOnlyLogs.eventGeneration.SimpleEventGenerationStrategy;
+import gossipingAppendOnlyLogs.motion.HabitMotionStrategy;
+import gossipingAppendOnlyLogs.motion.MotionStrategy;
+import gossipingAppendOnlyLogs.synchronization.OpenModelSynchronizationStrategy;
+import gossipingAppendOnlyLogs.synchronization.SynchronizationStrategy;
+import gossipingAppendOnlyLogs.synchronization.TransitiveInterestSynchronizationStrategy;
 import repast.simphony.engine.environment.RunEnvironment;
 
 public class RepastConfigStrategyFactory implements StrategyFactory {

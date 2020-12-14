@@ -3,9 +3,9 @@ package gossipingAppendOnlyLogs.motion;
 import gossipingAppendOnlyLogs.RepastUtils;
 import gossipingAppendOnlyLogs.actors.LAN;
 import gossipingAppendOnlyLogs.actors.Person;
-import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.engine.environment.RunEnvironment;
-import repast.simphony.random.*;
+import repast.simphony.random.RandomHelper;
+import repast.simphony.space.continuous.NdPoint;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,6 @@ package gossipingAppendOnlyLogs.models;
 import gossipingAppendOnlyLogs.events.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Store {
 

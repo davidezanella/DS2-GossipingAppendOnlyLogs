@@ -1,8 +1,5 @@
 package gossipingAppendOnlyLogs;
 
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import gossipingAppendOnlyLogs.actors.LAN;
 import gossipingAppendOnlyLogs.actors.Person;
 import repast.simphony.context.Context;
@@ -21,6 +18,9 @@ import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
 import repast.simphony.space.grid.SimpleGridAdder;
 import repast.simphony.space.grid.WrapAroundBorders;
+
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ProjectBuilder implements ContextBuilder<Object> {
 

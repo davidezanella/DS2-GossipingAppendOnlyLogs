@@ -6,12 +6,13 @@ import gossipingAppendOnlyLogs.models.PersonPublicKey;
 import gossipingAppendOnlyLogs.models.Store;
 
 public class OpenModelSynchronizationStrategy extends SynchronizationStrategy {
-	public OpenModelSynchronizationStrategy(Person person) {
-		super(person);
+
+	public OpenModelSynchronizationStrategy(Person local) {
+		super(local);
 	}
 
-	public void synchronize(Store localStore, Store remoteStore, PersonPublicKey localId, PersonPublicKey remoteId) {
-		createUnknownLogs(localStore, remoteStore);
+	public void synchronize(Store remoteStore, PersonPublicKey remoteId) {
+		createUnknownLogs(remoteStore);
 
 		// we should now update the local store with the new events that the remote store knows
 		var frontier = localStore.getFrontier(remoteStore.getIds());
@@ -19,16 +20,16 @@ public class OpenModelSynchronizationStrategy extends SynchronizationStrategy {
 		localStore.update(news);
 		
 		// save new events to a list for logging purposes
-		person.addedEvents.addAll(news);
+		local.addedEvents.addAll(news);
 	}
 
-	private void createUnknownLogs(Store local, Store remote) {
-		var knownIds = local.getIds();
-		remote.getIds()
+	protected void createUnknownLogs(Store remoteStore) {
+		var knownIds = localStore.getIds();
+		remoteStore.getIds()
 				.stream()
 				.filter(id -> !knownIds.contains(id))
 				.map(Log::new)
-				.forEach(local::add);
-		System.out.println("Added " + (local.getIds().size() - knownIds.size()) + " new logs");
+				.forEach(localStore::add);
+		System.out.println("Added " + (localStore.getIds().size() - knownIds.size()) + " new logs");
 	}
 }

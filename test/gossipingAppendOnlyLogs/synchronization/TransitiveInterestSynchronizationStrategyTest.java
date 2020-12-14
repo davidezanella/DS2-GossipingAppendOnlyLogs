@@ -3,7 +3,6 @@ package gossipingAppendOnlyLogs.synchronization;
 import gossipingAppendOnlyLogs.StrategyFactory;
 import gossipingAppendOnlyLogs.actors.Person;
 import gossipingAppendOnlyLogs.eventGeneration.EventGenerationStrategy;
-import gossipingAppendOnlyLogs.events.StreamEvent;
 import gossipingAppendOnlyLogs.motion.MotionStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +10,7 @@ import org.junit.jupiter.api.Test;
 import static gossipingAppendOnlyLogs.CryptographyUtils.generateKeys;
 import static org.junit.jupiter.api.Assertions.*;
 
-class OpenModelSynchronizationStrategyTest {
-
+class TransitiveInterestSynchronizationStrategyTest {
 	private Person alice;
 	private Person bob;
 
@@ -25,27 +23,13 @@ class OpenModelSynchronizationStrategyTest {
 	@Test
 	public void aliceDiscoverBobEmptyLog() {
 		// given
-		var aliceSynchronizationStrategy = new OpenModelSynchronizationStrategy(alice);
+		var aliceSynchronizationStrategy = new TransitiveInterestSynchronizationStrategy(alice);
 
-		// TODO: we actually do not need to pass alice's store and key, the strategy already known Alice
 		// when
 		aliceSynchronizationStrategy.synchronize(bob.getStore(), bob.getPublicKey());
 
 		// then
 		assertTrue(alice.getStore().getIds().contains(bob.getPublicKey()));
-	}
-
-	@Test
-	public void aliceDiscoverBobLogWithOneEvent() {
-		// given
-		bob.addEventToPersonalLog(new StreamEvent("My first post"));
-		var aliceSynchronizationStrategy = new OpenModelSynchronizationStrategy(alice);
-
-		// when
-		aliceSynchronizationStrategy.synchronize(bob.getStore(), bob.getPublicKey());
-
-		// then
-		assertEquals(1, alice.getStore().get(bob.getPublicKey()).getHeight());
 	}
 
 	private Person createPerson(String id) {

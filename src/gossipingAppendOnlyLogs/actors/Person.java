@@ -1,7 +1,6 @@
 package gossipingAppendOnlyLogs.actors;
 
 import gossipingAppendOnlyLogs.RepastUtils;
-import gossipingAppendOnlyLogs.RepastConfigStrategyFactory;
 import gossipingAppendOnlyLogs.StrategyFactory;
 import gossipingAppendOnlyLogs.eventGeneration.EventGenerationStrategy;
 import gossipingAppendOnlyLogs.events.Event;
@@ -13,13 +12,12 @@ import gossipingAppendOnlyLogs.motion.MotionStrategy;
 import gossipingAppendOnlyLogs.synchronization.SynchronizationStrategy;
 import repast.simphony.engine.schedule.ScheduledMethod;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptySet;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Person {
     public final String id; // TODO: Do we need an ID? can we just use the public key, and make the toString show an hash?
@@ -62,7 +60,7 @@ public class Person {
         getConnectedPeople()
                 .stream()
                 .filter(person -> person != this)
-                .forEach(person -> synchronizationStrategy.synchronize(this.store, person.store, this.getPublicKey(), person.getPublicKey()));
+                .forEach(person -> synchronizationStrategy.synchronize(person.store, person.getPublicKey()));
     }
 
     private Set<Person> getConnectedPeople(){
