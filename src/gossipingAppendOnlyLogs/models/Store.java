@@ -85,23 +85,14 @@ public class Store {
 	public Set<PersonPublicKey> getLogsBlockedBy(PersonPublicKey id) {
 		var log = logs.get(id);
 		var events = log.getEvents(0, log.getLast());
-		
-		var blocked = events.stream().filter(e -> (e instanceof BlockEvent)).map(e -> (BlockEvent)e);
-		var unblocked = events.stream().filter(e -> (e instanceof UnblockEvent)).map(e -> (UnblockEvent)e);
-		
-		// TODO: fix adding index into events?
-		var peopleBlocked = blocked.filter(e -> {
-			int blockedIdx = events.indexOf(e);
-			var numUnblocked = unblocked.filter(u -> u.unblockedPerson.equals(e.blockedPerson)).filter(u -> {
-				int unblockedIdx = events.indexOf(e);
-				// unblocked that person later than starting blocking it
-				return unblockedIdx > blockedIdx;
-			}).count();
-			// he's now blocked
-			return numUnblocked == 0;
-		}).map(e -> e.blockedPerson)
-				.collect(Collectors.toSet());
-
-		return peopleBlocked;
+		var blocked = new HashSet<PersonPublicKey>();
+		for (var event : events) {
+			if (event instanceof BlockEvent) {
+				blocked.add(((BlockEvent) event).blockedPerson);
+			} else if (event instanceof UnblockEvent) {
+				blocked.remove(((UnblockEvent) event).unblockedPerson);
+			}
+		}
+		return blocked;
 	}
 }
