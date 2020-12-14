@@ -38,10 +38,7 @@ public class Store {
 
 	public List<Event> getEventsSince(Frontier frontier) {
 		var events = new ArrayList<Event>();
-		var it = frontier.getIterator();
-
-		while (it.hasNext()) {
-			var item = it.next();
+		for (var item : frontier) {
 			var log = logs.get(item.id);
 			if(log != null) {
 				var lastIndex = log.getLast();
@@ -50,7 +47,6 @@ public class Store {
 					events.addAll(log.getEvents(item.last, lastIndex));
 			}
 		}
-
 		return events;
 	}
 
