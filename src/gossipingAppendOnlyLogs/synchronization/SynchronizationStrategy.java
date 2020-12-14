@@ -5,16 +5,36 @@ import gossipingAppendOnlyLogs.models.Log;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 import gossipingAppendOnlyLogs.models.Store;
 
-public abstract class SynchronizationStrategy {	
+import java.util.Set;
 
-    protected final Person local;
-    protected final Store localStore;
+public abstract class SynchronizationStrategy {
 
-    public SynchronizationStrategy(Person local) {
-        this.local = local;
-        this.localStore = local.getStore();
-    }
-    
-    public abstract void synchronize(Store remoteStore, PersonPublicKey remoteId);
+	protected final Person local;
+	protected final Store localStore;
 
+	public SynchronizationStrategy(Person local) {
+		this.local = local;
+		this.localStore = local.getStore();
+	}
+
+	public abstract void synchronize(Store remoteStore, PersonPublicKey remoteId);
+
+	protected void createUnknownLogs(Set<PersonPublicKey> toSync) {
+		var knownIds = localStore.getIds();
+		toSync.stream()
+				.filter(id -> !knownIds.contains(id))
+				.map(Log::new)
+				.forEach(localStore::add);
+		System.out.println("Added " + (localStore.getIds().size() - knownIds.size()) + " new logs");
+	}
+
+	protected void updateKnownIdsWithRemoteStore(Store remoteStore) {
+		// we should now update the stores
+		var frontier = localStore.getFrontier(localStore.getIds());
+		var news = remoteStore.getEventsSince(frontier);
+		localStore.update(news);
+
+		// save new events to a list for logging purposes
+		local.addedEvents.addAll(news);
+	}
 }

@@ -5,6 +5,12 @@ import gossipingAppendOnlyLogs.models.Log;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 import gossipingAppendOnlyLogs.models.Store;
 
+import java.security.PublicKey;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class TransitiveInterestSynchronizationStrategy extends SynchronizationStrategy {
 
     public TransitiveInterestSynchronizationStrategy(Person person) {
@@ -12,24 +18,21 @@ public class TransitiveInterestSynchronizationStrategy extends SynchronizationSt
 	}
 
 	public void synchronize(Store remoteStore, PersonPublicKey remoteId) {
-		createUnknownLogs(remoteStore);
-
-		// we should now update the stores
-		var frontier = localStore.getFrontier(localStore.getIds());
-		var news = remoteStore.getEventsSince(frontier);
-		localStore.update(news);
-
-		// save new events to a list for logging purposes
-		local.addedEvents.addAll(news);
+		var toSync = computeIdsToSync(remoteStore, remoteId);
+		createUnknownLogs(toSync);
+		updateKnownIdsWithRemoteStore(remoteStore);
 	}
 
-	protected void createUnknownLogs(Store remoteStore) {
-		var knownIds = localStore.getIds();
-		remoteStore.getIds()
-				.stream()
-				.filter(id -> !knownIds.contains(id))
-				.map(Log::new)
-				.forEach(localStore::add);
-		System.out.println("Added " + (localStore.getIds().size() - knownIds.size()) + " new logs");
+	private Set<PersonPublicKey> computeIdsToSync(Store remoteStore, PersonPublicKey remoteId){
+		var friends = localStore.getLogsFollowedBy(local.getPublicKey());
+		var friendsOfRemote = remoteStore.getLogsFollowedBy(remoteId);
+		var blocked = localStore.getLogsBlockedBy(local.getPublicKey());
+
+		var toSync = new HashSet<PersonPublicKey>();
+		toSync.add(remoteId); // synchronize with remote even if it's not my friend (we don't sync if I blocked him, see below)
+		toSync.addAll(friends);
+		toSync.addAll(friendsOfRemote); // transitive interest
+		toSync.removeAll(blocked);
+		return toSync;
 	}
 }
