@@ -19,9 +19,7 @@ public class HabitMotionStrategy extends MotionStrategy {
 		this.home = RepastUtils.space.getLocation(person);
 
 		// TODO: change mean and std in base of the number of LANs or the number of people
-		var numLANs = RandomHelper.createNormal(3, 3).nextInt();
-		if (numLANs == 0)
-			numLANs = 1;
+		var numLANs = Math.max(1, RandomHelper.createNormal(3, 3).nextInt());
 		var totLANs = RepastUtils.getAllLANsInGrid(person).size();
 		for (var i = 0; i < numLANs; i++) {
 			// TODO: fix that the same LAN could be sampled more times
