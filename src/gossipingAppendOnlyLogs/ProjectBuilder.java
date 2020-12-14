@@ -1,5 +1,8 @@
 package gossipingAppendOnlyLogs;
 
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import gossipingAppendOnlyLogs.actors.LAN;
 import gossipingAppendOnlyLogs.actors.Person;
 import repast.simphony.context.Context;
@@ -10,6 +13,7 @@ import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.parameter.Parameters;
+import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.continuous.RandomCartesianAdder;
@@ -21,6 +25,7 @@ import repast.simphony.space.grid.WrapAroundBorders;
 public class ProjectBuilder implements ContextBuilder<Object> {
 
     private static final int GRID_SIZE = 50;
+    private static final int LANs_GRID_FACTOR = 10; // scaling factor of the LANs grid with the respect to the standard grid
 
     private final ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
     private final GridFactory gridFactory = GridFactoryFinder.createGridFactory(null);
@@ -64,7 +69,6 @@ public class ProjectBuilder implements ContextBuilder<Object> {
 
         createLANs(params);
         createPeople(params);
-        randomlyMoveAllAgents();
 
         int maxTicks = params.getInteger("stopAt");
         RunEnvironment.getInstance().endAt(maxTicks);
@@ -73,11 +77,21 @@ public class ProjectBuilder implements ContextBuilder<Object> {
     }
 
     private void createLANs(Parameters params){
+    	var grid_lans_size = GRID_SIZE / LANs_GRID_FACTOR;
+    	var numPoints = (int)Math.pow(grid_lans_size, 2);
+    	var possiblePositions = IntStream.rangeClosed(0, numPoints).boxed().collect(Collectors.toList());  
+
         int numLANs = params.getInteger("numLANs");
         for (int i = 0; i < numLANs; i++) {
             var id = "LAN" + i;
             LAN lan = new LAN(id);
             context.add(lan);
+            
+            var position = possiblePositions.remove(RandomHelper.nextIntFromTo(0, possiblePositions.size() - 1));
+            var y = Math.ceil(position / grid_lans_size) * LANs_GRID_FACTOR;
+            var x = (position % grid_lans_size) * LANs_GRID_FACTOR;
+
+            RepastUtils.moveTo(lan, x, y);
         }
     }
 
@@ -87,13 +101,13 @@ public class ProjectBuilder implements ContextBuilder<Object> {
             var id = "Person" + i;
             Person p = new Person(id, CryptographyUtils.generateKeys(), strategyFactory);
             context.add(p);
+            
+            randomlyMoveAgent(p);
         }
     }
 
-    private void randomlyMoveAllAgents() {
-        for (Object obj : context) {
-            NdPoint pt = space.getLocation(obj);
-            RepastUtils.moveTo(obj, pt.getX(), pt.getY());
-        }
+    private void randomlyMoveAgent(Object obj) {
+        NdPoint pt = space.getLocation(obj);
+        RepastUtils.moveTo(obj, pt.getX(), pt.getY());
     }
 }
