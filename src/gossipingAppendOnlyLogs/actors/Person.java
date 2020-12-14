@@ -1,7 +1,8 @@
 package gossipingAppendOnlyLogs.actors;
 
 import gossipingAppendOnlyLogs.RepastUtils;
-import gossipingAppendOnlyLogs.StrategyUtils;
+import gossipingAppendOnlyLogs.RepastConfigStrategyFactory;
+import gossipingAppendOnlyLogs.StrategyFactory;
 import gossipingAppendOnlyLogs.eventGeneration.EventGenerationStrategy;
 import gossipingAppendOnlyLogs.events.Event;
 import gossipingAppendOnlyLogs.models.Log;
@@ -27,18 +28,21 @@ public class Person {
 
 	private final Store store = new Store();
 
-    private final SynchronizationStrategy synchronizationStrategy = StrategyUtils.getCorrectStrategy(this);
-    private final MotionStrategy motionStrategy = StrategyUtils.getMotionStrategy(this);
-    private final EventGenerationStrategy eventGenerationStrategy = StrategyUtils.getEventGenerationStrategy(this);
+	private final SynchronizationStrategy synchronizationStrategy;
+	private final MotionStrategy motionStrategy;
+	private final EventGenerationStrategy eventGenerationStrategy;
     
     private final List<Event> createdEvents = new ArrayList<Event>(); // for log purposes
     public final List<Event> addedEvents = new ArrayList<Event>(); // for log purposes
 
-    public Person(String id, PersonKeys keys) {
-        this.id = id;
-        this.keys = keys;
-        createPersonalLog();
-    }
+	public Person(String id, PersonKeys keys, StrategyFactory strategyFactory) {
+		this.id = id;
+		this.keys = keys;
+		createPersonalLog();
+		this.synchronizationStrategy = strategyFactory.getCorrectStrategy(this);
+		this.motionStrategy = strategyFactory.getMotionStrategy(this);
+		this.eventGenerationStrategy = strategyFactory.getEventGenerationStrategy(this);
+	}
 
     private void createPersonalLog() {
 		store.add(new Log(keys.publicKey));

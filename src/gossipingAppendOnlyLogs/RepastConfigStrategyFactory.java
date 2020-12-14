@@ -6,16 +6,14 @@ import gossipingAppendOnlyLogs.motion.*;
 import gossipingAppendOnlyLogs.synchronization.*;
 import repast.simphony.engine.environment.RunEnvironment;
 
-/**
- * TODO: Maybe we use the Abstract Factory Pattern, but let's wait see how this file will grow
- */
-public class StrategyUtils {
+public class RepastConfigStrategyFactory implements StrategyFactory {
 
 	private static final String OPEN_MODEL = "OpenModel";
 	private static final String TRANSITIVE_INTEREST = "TransitiveInterest";
 
-	public static SynchronizationStrategy getCorrectStrategy(Person person) {
-		String strategy = getStringName();
+	@Override
+	public SynchronizationStrategy getCorrectStrategy(Person person) {
+		String strategy = getSynchronizationProtocol();
 		if (strategy.equals(OPEN_MODEL)) {
 			return new OpenModelSynchronizationStrategy(person);
 		} else {
@@ -23,13 +21,15 @@ public class StrategyUtils {
 		}
 	}
 
-	public static MotionStrategy getMotionStrategy(Person person) {
+	@Override
+	public MotionStrategy getMotionStrategy(Person person) {
 		return new HabitMotionStrategy(person);
 		//return new RandomMotionStrategy(person);
 	}
 
-	public static EventGenerationStrategy getEventGenerationStrategy(Person person) {
-		String strategy = getStringName();
+	@Override
+	public EventGenerationStrategy getEventGenerationStrategy(Person person) {
+		String strategy = getSynchronizationProtocol();
 		if (strategy.equals(OPEN_MODEL)) {
 			return new SimpleEventGenerationStrategy(person);
 		} else {
@@ -37,7 +37,7 @@ public class StrategyUtils {
 		}
 	}
 
-	private static String getStringName() {
+	private static String getSynchronizationProtocol() {
 		var params = RunEnvironment.getInstance().getParameters();
 		return params.getString("synchronizationProtocol");
 	}

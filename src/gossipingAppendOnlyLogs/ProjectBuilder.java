@@ -25,6 +25,8 @@ public class ProjectBuilder implements ContextBuilder<Object> {
     private final ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder.createContinuousSpaceFactory(null);
     private final GridFactory gridFactory = GridFactoryFinder.createGridFactory(null);
 
+    private final StrategyFactory strategyFactory = new RepastConfigStrategyFactory();
+
     private Context<Object> context;
 
     private ContinuousSpace<Object> space;
@@ -83,7 +85,7 @@ public class ProjectBuilder implements ContextBuilder<Object> {
         int numPeople = params.getInteger("numPeople");
         for (int i = 0; i < numPeople; i++) {
             var id = "Person" + i;
-            Person p = new Person(id, CryptographyUtils.generateKeys());
+            Person p = new Person(id, CryptographyUtils.generateKeys(), strategyFactory);
             context.add(p);
         }
     }
