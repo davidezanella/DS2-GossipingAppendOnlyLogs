@@ -4,6 +4,7 @@ import gossipingAppendOnlyLogs.RepastUtils;
 import gossipingAppendOnlyLogs.actors.LAN;
 import gossipingAppendOnlyLogs.actors.Person;
 import repast.simphony.space.continuous.NdPoint;
+import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.random.*;
 
 import java.util.ArrayList;
@@ -16,20 +17,22 @@ public class HabitMotionStrategy extends MotionStrategy {
 	}
 	
 	private void init() {		
+        var params = RunEnvironment.getInstance().getParameters();
+		
 		this.home = RepastUtils.space.getLocation(person);
 
-		// TODO: change mean and std in base of the number of LANs or the number of people
-		var numLANs = Math.max(1, RandomHelper.createNormal(3, 3).nextInt());
+		var numLANs = Math.max(1, 
+				RandomHelper.createNormal(params.getInteger("meanPrefLANs"), params.getInteger("stdPrefLANs")).nextInt());
 		var totLANs = RepastUtils.getAllLANsInGrid(person).size();
 		for (var i = 0; i < numLANs; i++) {
-			// TODO: fix that the same LAN could be sampled more times
+			// Note that the same LAN could be sampled more times
 			var LANIndex = RandomHelper.nextIntFromTo(0, totLANs - 1);
 			preferredLAN.add(RepastUtils.getAllLANsInGrid(person).get(LANIndex));
 		}
 
-		var normalDistr = RandomHelper.createNormal(15, 10);
-		this.ticksSpentAtHome = normalDistr.nextInt();
-		this.ticksSpentAtLAN = normalDistr.nextInt();
+		var normalDistr = RandomHelper.createNormal(params.getInteger("meanTicksWaiting"), params.getInteger("stdTicksWaiting"));
+		this.ticksSpentAtHome = Math.max(0, normalDistr.nextInt());
+		this.ticksSpentAtLAN = Math.max(0, normalDistr.nextInt());
 	}
 
 	private NdPoint targetPoint;

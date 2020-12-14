@@ -17,5 +17,17 @@
 	<parameter name="numPeople" displayName="Num People"
 		type="int" defaultValue="15" isReadOnly="false"
 		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="meanPrefLANs" displayName="Gaussian's mean number of preferred LANs"
+		type="int" defaultValue="3" isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="stdPrefLANs" displayName="Gaussian's std number of preferred LANs"
+		type="int" defaultValue="3" isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="meanTicksWaiting" displayName="Gaussian's mean number of ticks waiting"
+		type="int" defaultValue="15" isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="stdTicksWaiting" displayName="Gaussian's std number of ticks waiting"
+		type="int" defaultValue="10" isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
 
 </parameters>
