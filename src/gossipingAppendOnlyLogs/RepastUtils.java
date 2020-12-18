@@ -22,6 +22,7 @@ public class RepastUtils {
     public static ContinuousSpace<Object> space;
     
     public static int lastEventId = -1; // used for logging purposes
+    public static int lastSpecialEventId = -1; // used for logging purposes, special events are follows/unfollows/...
 
     public static List<LAN> getAllLANsInGrid(Object actor) {
         return getAllActorsInGrid(actor, LAN.class);
@@ -68,5 +69,25 @@ public class RepastUtils {
     public static String getNewEventId() {
     	lastEventId++;
     	return "Event" + lastEventId;
+    }
+    
+    public static String getNewFollowEventId() {
+    	lastSpecialEventId++;
+    	return "FollowEvent" + lastSpecialEventId;
+    }
+    
+    public static String getNewUnfollowEventId() {
+    	lastSpecialEventId++;
+    	return "UnfollowEvent" + lastSpecialEventId;
+    }
+    
+    public static String getNewBlockEventId() {
+    	lastSpecialEventId++;
+    	return "BlockEvent" + lastSpecialEventId;
+    }
+    
+    public static String getNewUnblockEventId() {
+    	lastSpecialEventId++;
+    	return "UnblockEvent" + lastSpecialEventId;
     }
 }

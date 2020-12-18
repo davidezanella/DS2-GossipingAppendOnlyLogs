@@ -7,11 +7,11 @@ import gossipingAppendOnlyLogs.models.PersonPublicKey;
 
 public abstract class Event {
 
-    private PersonPublicKey creatorId;
-    private EventHash previousEventHash;
-    private EventSignature signature;
+    protected PersonPublicKey creatorId;
+    protected EventHash previousEventHash;
+    protected EventSignature signature;
     
-    private String uniqueId; // used for logging purposes only
+    protected String uniqueId; // used for logging purposes only
 
 
     public void sign(PersonKeys keys, EventHash previousEventHash) {
