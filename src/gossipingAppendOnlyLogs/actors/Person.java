@@ -102,6 +102,7 @@ public class Person {
     	return this.store;
     }
     
+    //used by repast for logging purposes
     public String createdEvents() {
     	List<String> eventsStrings = createdEvents.stream()
     			.map(Event::toString)
@@ -112,6 +113,7 @@ public class Person {
     	return String.join(",", eventsStrings);
     }
     
+    //used by repast for logging purposes
     public String arrivedEvents() {
     	List<String> eventsStrings = addedEvents.stream()
     			.map(Event::toString)

@@ -30,10 +30,12 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 	}
 
 	public void generateInterestEvent() {
-		// TODO: can we be stuck in a infinite loop?
 		Event event;
+		//used to exit the loop in the case the person is already following everybody else
+		int count = 0; 
+		
 		do {
-			int choice = RandomHelper.nextIntFromTo(0, 10);
+			int choice = RandomHelper.nextIntFromTo(0, 9);
 			if (choice <= 4) {
 				//a followEvent is the most probable event type
 				event = createFollowEvent();
@@ -44,7 +46,9 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 			} else {
 				event = createUnblockEvent();
 			}
-		} while (event == null);
+			
+			count++;
+		} while (event == null && count<2);
 		person.addEventToPersonalLog(event);
 	}
 
