@@ -32,23 +32,21 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 	public void generateInterestEvent() {
 		Event event;
 		//used to exit the loop in the case the person is already following everybody else
-		int count = 0; 
 		
 		do {
 			int choice = RandomHelper.nextIntFromTo(0, 9);
-			if (choice <= 4) {
-				//a followEvent is the most probable event type
+			//a followEvent is the most probable event type
+			if (choice <= 4)
 				event = createFollowEvent();
-			} else if (choice <= 7) {
+			else if (choice <= 7) 
 				event = createUnfollowEvent();
-			} else if (choice <= 8) {
+			else if (choice <= 8)
 				event = createBlockEvent();
-			} else {
+			else
 				event = createUnblockEvent();
-			}
 			
-			count++;
-		} while (event == null && count<2);
+		} while (event == null);
+		
 		person.addEventToPersonalLog(event);
 	}
 
