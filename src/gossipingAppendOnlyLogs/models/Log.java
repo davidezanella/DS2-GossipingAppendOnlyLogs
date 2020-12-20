@@ -23,36 +23,36 @@ public class Log {
 	}
 
 	public List<Event> getEvents(int start, int end) {
-		if (events.size() == 0)
-			return new ArrayList<Event>();
-
 		var toReturn = new ArrayList<Event>();
 		// useful to tolerate start or end equal to -1
 		for (int i = 0; i <= end; i++) {
 			if (i >= start)
 				toReturn.add(events.get(i));
 		}
-
 		return toReturn;
 	}
 
 	public void update(List<Event> remoteEvents) {
-		for (Event e : remoteEvents) {
-			if (e.getCreatorId().equals(id)) {
-				var alreadyPresent = events.stream().filter(x -> x.hash().equals(e.hash())).findFirst();
-				if (alreadyPresent.isEmpty()) {
-					// we don't have this event yet
-					if(events.isEmpty() || events.get(events.size() - 1).hash().equals(e.getPreviousEventHash())) {
-						// this event is compatible, so we can add it
-						events.add(e);
-					}
-				}
-			}
-		}
+		remoteEvents
+				.stream()
+				.filter(e -> e.getCreatorId().equals(id))
+				.filter(e -> !containsEvent(e))
+				.filter(this::mayBeNextEvent)
+				.forEach(events::add);
 	}
 
-	public void update(List<Event> localEvents, PersonPrivateKey privateKey) {
-		throw new RuntimeException("not implemented yet");
+	private boolean containsEvent(Event a) {
+		return events
+				.stream()
+				.anyMatch(b -> b.hash().equals(a.hash()));
+	}
+
+	private boolean mayBeNextEvent(Event e) {
+		if (events.isEmpty()) {
+			return true;
+		}
+		var lastEvent = events.get(events.size() - 1);
+		return lastEvent.hash().equals(e.getPreviousEventHash());
 	}
 
 	public void appendEvent(PersonKeys keysOfLogOwner, Event event) {
