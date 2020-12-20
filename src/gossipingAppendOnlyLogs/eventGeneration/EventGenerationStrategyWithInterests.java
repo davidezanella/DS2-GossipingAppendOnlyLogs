@@ -16,8 +16,9 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 	public EventGenerationStrategyWithInterests(Person person) {
 		super(person);
 		var params = ScheduleParameters.createUniformProbabilityRepeating(10, 0, 100, 50, 1);
+		var paramsSpecialEvents = ScheduleParameters.createUniformProbabilityRepeating(10, 0, 100, 50, 1);
 		scheduler.schedule(params, this, "generateEvent");
-		scheduler.schedule(params, this, "generateInterestEvent");
+		scheduler.schedule(paramsSpecialEvents, this, "generateInterestEvent");
 	}
 
 	/*every now and then, create a stream event (this makes sure that a person actively
