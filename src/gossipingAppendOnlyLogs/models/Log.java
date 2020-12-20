@@ -23,16 +23,12 @@ public class Log {
 	}
 
 	public List<Event> getEvents(int start, int end) {
-		if (events.size() == 0)
-			return new ArrayList<Event>();
-
 		var toReturn = new ArrayList<Event>();
 		// useful to tolerate start or end equal to -1
 		for (int i = 0; i <= end; i++) {
 			if (i >= start)
 				toReturn.add(events.get(i));
 		}
-
 		return toReturn;
 	}
 
