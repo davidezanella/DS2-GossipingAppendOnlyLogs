@@ -61,11 +61,8 @@ public class Store {
 			// this if condition should be removed once Transient interest sync is fixed
 			if (logs.containsKey(e.getCreatorId())) {
 				// I'm interested only in log ids that I already know
-
-				// TODO: maybe change
-				var evList = new ArrayList<Event>();
-				evList.add(e);
-				logs.get(e.getCreatorId()).update(evList);
+				var log = logs.get(e.getCreatorId());
+				log.update(Collections.singletonList(e));
 			}
 		}
 	}
