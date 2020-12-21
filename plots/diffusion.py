@@ -16,8 +16,8 @@ If --target option is specified, instead of plotting the graph the script will a
 
 def parse_arg(argv):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--file', type=str, help='Path to the log file')
-    parser.add_argument('--mode', type=str, help='Either "Open" or "Transitive"')
+    parser.add_argument('--file', type=str, help='Path to the log file', required=True)
+    parser.add_argument('--mode', type=str, help='Either "Open" or "Transitive"', required=True, choices=["Open", "Transitive"])
     parser.add_argument('--target', type=str, help='Csv to write to')
     return parser.parse_args(argv)
 
@@ -69,9 +69,6 @@ def main():
             plot_open(latency_open(read_events_open(events)))
         elif(args.mode=="Transitive"):
             print()
-        else:
-            print("Unrecognized --mode argument")
-            exit(1)
     else:
         #just append the results to a csv file
         print()
