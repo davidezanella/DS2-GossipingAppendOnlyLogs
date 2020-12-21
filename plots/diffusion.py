@@ -48,8 +48,11 @@ def read_events_open(file):
 #calculate the latency in case of an open model
 def latency_open(events):
     for event in events:
-        events[event][1] = statistics.mean(events[event][1])
-        events[event] = events[event][1] - events[event][0]
+        if len(events[event][1]) > 0:
+            mean_arrived_tick = statistics.mean(events[event][1])
+            events[event] = mean_arrived_tick - events[event][0]
+        else:
+            events[event] = -1
 
     #return a dict event: latency
     return events
