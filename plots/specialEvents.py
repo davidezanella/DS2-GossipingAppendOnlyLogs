@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import statistics
 
 '''
-Simple script that plots the 
+Simple script that plots the number of events created during the simulation
 '''
 
 def parse_arg(argv):
@@ -100,7 +100,7 @@ def main():
         exit(1)
     
     events = read_events(args.file)
-    plot(groupByTick(events, args.group), args.group)   
+    plot(groupByTick(events, int(args.group)), int(args.group))
 
 if __name__ == "__main__":
     main()
