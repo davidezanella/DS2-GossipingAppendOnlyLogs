@@ -66,7 +66,7 @@ def main():
     if(args.target == None):
         #just plot the graph for a single run
         if(args.mode=="Open"):
-            plot_open(latency_open(read_events_open(events)))
+            plot_open(latency_open(read_events_open(args.file)))
         elif(args.mode=="Transitive"):
             print()
     else:
