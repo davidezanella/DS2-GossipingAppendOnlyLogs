@@ -24,22 +24,23 @@ def parse_arg(argv):
 #read the file and create a dictionary 
 def read_events_open(file):
     file_events = open(str(file))
-    csv_events = csv.DictReader(file_events, delimiter=',')
+    csv_events = list(csv.DictReader(file_events, delimiter=','))
 
     events = {}
 
     for row in csv_events:
         if row['createdEvents'] != "":
-            loggedEvents = row['createdEvents'].split(",")
+            created_events = row['createdEvents'].split(",")
 
-            for event in loggedEvents:
-                events[event] = [int(row['tick']), []]
+            for event in created_events:
+                events[event] = [float(row['tick']), []]
 
+    for row in csv_events:
         if row['arrivedEvents'] != "":
-            loggedEvents = row['arrivedEvents'].split(",")
+            arrived_events = row['arrivedEvents'].split(",")
 
-            for event in loggedEvents:
-                events[event][1].append(int(row['tick']))
+            for event in arrived_events:
+                events[event][1].append(float(row['tick']))
 
     #return a dict event: <creation_tick, [arrival_tick1, arrival_tick2, ...]>
     return events
