@@ -18,6 +18,7 @@ def parse_arg(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--file', type=str, help='Path to the log file', required=True)
     parser.add_argument('--mode', type=str, help='Either "Open" or "Transitive"', required=True, choices=["Open", "Transitive"])
+    parser.add_argument('--strategy', type=str, help='Either "Random" or "Habit"', choices=["Random", "Habit"])
     parser.add_argument('--target', type=str, help='Csv to write to')
     return parser.parse_args(argv)
 
@@ -42,8 +43,40 @@ def read_events_open(file):
             for event in arrived_events:
                 events[event][1].append(float(row['tick']))
 
-    #return a dict event: <creation_tick, [arrival_tick1, arrival_tick2, ...]>
+    #return a dict events: <creation_tick, [arrival_tick1, arrival_tick2, ...]>
     return events
+
+def read_batch_open(file):
+    file_events = open(str(file))
+    csv_events = list(csv.DictReader(file_events, delimiter=','))
+
+    events = {}
+
+    for row in csv_events:
+        run = row['run']
+
+        if(run not in events.keys()):
+            events[run]={}
+
+        if row['createdEvents'] != "":
+            created_events = row['createdEvents'].split(",")
+
+        for event in created_events:
+            events[run][event] = [float(row['tick']), []]     
+
+    for row in csv_events:
+        run = row['run']
+
+        if row['arrivedEvents'] != "":
+            arrived_events = row['arrivedEvents'].split(",")
+
+            for event in arrived_events:
+                events[run][event][1].append(float(row['tick']))
+
+    #return a dict run: { event: <creation_tick, [arrival_tick1, arrival_tick2, ...]>}
+    return events
+
+
 
 #calculate the latency in case of an open model
 def latency_open(events):
@@ -57,6 +90,25 @@ def latency_open(events):
     #return a dict event: latency
     return events
 
+def latency_batch_open(events, strategy):
+    rows = []
+
+    for run in events:
+        run_latencies = []
+
+        for event in events[run]:
+            if len(events[run][event][1]) > 0:
+                mean_arrived_tick = statistics.mean(events[run][event][1])
+                run_latencies.append(mean_arrived_tick - events[run][event][0])
+        
+        rows.append({
+            'Strategy': str(strategy),
+            'Latency': str(statistics.mean(run_latencies))
+        })
+
+    return rows
+
+    
 def plot_open(events):
     plt.plot(events.keys(), events.values())
     plt.xlabel('Events')
@@ -72,10 +124,25 @@ def main():
         if(args.mode=="Open"):
             plot_open(latency_open(read_events_open(args.file)))
         elif(args.mode=="Transitive"):
+            #remove the print when editing this part
             print()
     else:
-        #just append the results to a csv file
-        print()
+        #calculate mean of batch run and append to file
+        if(args.mode=="Open"):
+            rows = latency_batch_open(read_batch_open(args.file), args.strategy)
+            #remove the print when editing this part
+            file_exists = path.exists(args.target)
+            with open(args.target, 'a') as fd:
+                writer = csv.DictWriter(fd, fieldnames=rows[0].keys())
+
+                if not file_exists:
+                    writer.writeheader()
+
+                writer.writerows(rows)
+
+        elif(args.mode=="Transitive"):
+            #remove the print when editing this part
+            print()
 
 
         
