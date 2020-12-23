@@ -11,7 +11,9 @@ Script that plots the diffusion of the different events during the simulation, c
 Two modes:
  - Open for the openModel, Transitive for the transitiveInterestModel
 
-If --target option is specified, instead of plotting the graph the script will append the results to a csv file
+If --target option is specified, instead of plotting the graph the script will append the results to a csv file and
+is intended for use with a batch file. If target is NOT specified, the script will plot the graph of the latencies by
+reading a non-batch log file.
 '''
 
 def parse_arg(argv):
@@ -90,7 +92,7 @@ def latency_open(events):
     #return a dict event: latency
     return events
 
-def latency_batch_open(events, strategy):
+def latency_batch_open(events, strategy, mode):
     rows = []
 
     for run in events:
@@ -103,6 +105,7 @@ def latency_batch_open(events, strategy):
         
         rows.append({
             'Strategy': str(strategy),
+            'Mode': str(mode),
             'Latency': str(statistics.mean(run_latencies))
         })
 
@@ -121,28 +124,19 @@ def main():
 
     if(args.target == None):
         #just plot the graph for a single run
-        if(args.mode=="Open"):
-            plot_open(latency_open(read_events_open(args.file)))
-        elif(args.mode=="Transitive"):
-            #remove the print when editing this part
-            print()
+        plot_open(latency_open(read_events_open(args.file)))
     else:
         #calculate mean of batch run and append to file
-        if(args.mode=="Open"):
-            rows = latency_batch_open(read_batch_open(args.file), args.strategy)
-            #remove the print when editing this part
-            file_exists = path.exists(args.target)
-            with open(args.target, 'a') as fd:
-                writer = csv.DictWriter(fd, fieldnames=rows[0].keys())
+        rows = latency_batch_open(read_batch_open(args.file), args.strategy, args.mode)
+        #remove the print when editing this part
+        file_exists = path.exists(args.target)
+        with open(args.target, 'a') as fd:
+            writer = csv.DictWriter(fd, fieldnames=rows[0].keys())
 
-                if not file_exists:
-                    writer.writeheader()
+            if not file_exists:
+                writer.writeheader()
 
-                writer.writerows(rows)
-
-        elif(args.mode=="Transitive"):
-            #remove the print when editing this part
-            print()
+            writer.writerows(rows)
 
 
         
