@@ -8,8 +8,6 @@ import statistics
 
 '''
 Script that plots the latency of the different events during the simulation.
-Two modes:
- - Open for the openModel, Transitive for the transitiveInterestModel
 
 If --target option is specified, instead of plotting the graph the script will append the results to a csv file and
 is intended for use with a batch file. If target is NOT specified, the script will plot the graph of the latencies by
@@ -19,8 +17,8 @@ reading a non-batch log file.
 def parse_arg(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--file', type=str, help='Path to the log file', required=True)
-    parser.add_argument('--mode', type=str, help='Either "Open" or "Transitive"', required=True, choices=["Open", "Transitive"])
-    parser.add_argument('--strategy', type=str, help='Either "Random" or "Habit"', choices=["Random", "Habit"])
+    parser.add_argument('--lans', type=int, help='Number of LANs in the simulation', required=True)
+    parser.add_argument('--persons', type=int, help='Number of persons in the simulation', required=True)
     parser.add_argument('--target', type=str, help='Csv to write to')
     return parser.parse_args(argv)
 
@@ -92,7 +90,7 @@ def latency_open(events):
     #return a dict event: latency
     return events
 
-def latency_batch_open(events, strategy, mode):
+def latency_batch_open(events, lans, persons):
     rows = []
 
     for run in events:
@@ -104,8 +102,8 @@ def latency_batch_open(events, strategy, mode):
                 run_latencies.append(mean_arrived_tick - events[run][event][0])
         
         rows.append({
-            'Strategy': str(strategy),
-            'Mode': str(mode),
+            'LANs': str(lans),
+            'Persons': str(persons),
             'Latency': str(statistics.mean(run_latencies))
         })
 
@@ -127,7 +125,7 @@ def main():
         plot_open(latency_open(read_events_open(args.file)))
     else:
         #calculate mean of batch run and append to file
-        rows = latency_batch_open(read_batch_open(args.file), args.strategy, args.mode)
+        rows = latency_batch_open(read_batch_open(args.file), args.lans, args.persons)
         #remove the print when editing this part
         file_exists = path.exists(args.target)
         with open(args.target, 'a') as fd:
@@ -137,9 +135,6 @@ def main():
                 writer.writeheader()
 
             writer.writerows(rows)
-
-
-        
 
 if __name__ == "__main__":
     main()
