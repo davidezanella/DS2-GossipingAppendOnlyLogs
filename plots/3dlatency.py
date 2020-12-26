@@ -26,7 +26,7 @@ def read_latencies(file):
     for row in csv_latencies:
         if (row['LANs'], row['Persons']) not in latencies:
             latencies[(row['LANs'], row['Persons'])] = [float(row['Latency'])]
-        elif:
+        else:
             latencies[(row['LANs'], row['Persons'])].append(float(row['Latency']))
 
     for key in latencies:
@@ -38,7 +38,18 @@ def plot(latencies):
     fig = plt.figure()
     ax = fig.gca(projection='3d')
 
-    #TODO: understand how to draw the 3d graph
+    xs, ys, zs = [], [], []
+    for key, value in latencies.items():
+        xs.append(int(key[0]))
+        ys.append(int(key[1]))
+        zs.append(value)
+
+    ax.plot(xs, ys, zs)
+    ax.set_xlabel('LANs number')
+    ax.set_ylabel('People number')
+    ax.set_zlabel('Mean latency')
+    
+    plt.show()
     
 
 def main():

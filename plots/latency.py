@@ -57,7 +57,8 @@ def read_batch_open(file):
 
         if(run not in events.keys()):
             events[run]={}
-
+            
+        created_events = []
         if row['createdEvents'] != "":
             created_events = row['createdEvents'].split(",")
 
