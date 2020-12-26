@@ -6,6 +6,7 @@ import gossipingAppendOnlyLogs.eventGeneration.EventGenerationStrategyWithIntere
 import gossipingAppendOnlyLogs.eventGeneration.SimpleEventGenerationStrategy;
 import gossipingAppendOnlyLogs.motion.HabitMotionStrategy;
 import gossipingAppendOnlyLogs.motion.MotionStrategy;
+import gossipingAppendOnlyLogs.motion.RandomMotionStrategy;
 import gossipingAppendOnlyLogs.synchronization.OpenModelSynchronizationStrategy;
 import gossipingAppendOnlyLogs.synchronization.SynchronizationStrategy;
 import gossipingAppendOnlyLogs.synchronization.TransitiveInterestSynchronizationStrategy;
@@ -28,8 +29,12 @@ public class RepastConfigStrategyFactory implements StrategyFactory {
 
 	@Override
 	public MotionStrategy getMotionStrategy(Person person) {
-		return new HabitMotionStrategy(person);
-		//return new RandomMotionStrategy(person);
+		var params = RunEnvironment.getInstance().getParameters();
+		var motionStrategy = params.getString("motionStrategy");
+		if(motionStrategy.equals("HabitMotion"))
+			return new HabitMotionStrategy(person);
+		else
+			return new RandomMotionStrategy(person);
 	}
 
 	@Override

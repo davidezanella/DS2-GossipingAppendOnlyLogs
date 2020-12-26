@@ -29,5 +29,10 @@
 	<parameter name="stdTicksWaiting" displayName="Gaussian's std number of ticks waiting"
 		type="int" defaultValue="10" isReadOnly="false"
 		converter="repast.simphony.parameter.StringConverterFactory$IntConverter" />
+	<parameter name="motionStrategy" displayName="Motion strategy of people"
+		type="java.lang.String"
+		defaultValue="HabitMotion" isReadOnly="false"
+		converter="repast.simphony.parameter.StringConverterFactory$StringStringConverter"
+		values="HabitMotion RandomMotion" />
 
 </parameters>
