@@ -2,9 +2,9 @@ package gossipingAppendOnlyLogs.actors;
 
 import gossipingAppendOnlyLogs.RepastUtils;
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class LAN {
 	public final String ID;
@@ -15,17 +15,28 @@ public class LAN {
 	}
 
 	public Set<Person> getConnectedPeople() {
-		var people = RepastUtils.getAllPeopleInGrid(this).stream()
+		return RepastUtils.getAllPeopleInGrid(this)
+				.stream()
 				.filter(p -> {
 					var lan = p.getConnectedLAN();
-					if (lan == null)
+					if (lan.isEmpty()) {
 						return false;
-					return lan.ID.equals(ID);
+					}
+					return lan.get().equals(this);
 				})
-				.toArray(Person[]::new);
+				.collect(Collectors.toSet());
+	}
 
-		Set<Person> set = new HashSet<>(); 
-		Collections.addAll(set, people); 
-		return set;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		LAN lan = (LAN) o;
+		return ID.equals(lan.ID);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(ID);
 	}
 }

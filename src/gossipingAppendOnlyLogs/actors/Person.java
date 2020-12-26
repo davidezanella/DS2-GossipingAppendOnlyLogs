@@ -12,9 +12,7 @@ import gossipingAppendOnlyLogs.motion.MotionStrategy;
 import gossipingAppendOnlyLogs.synchronization.SynchronizationStrategy;
 import repast.simphony.engine.schedule.ScheduledMethod;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptySet;
@@ -64,20 +62,19 @@ public class Person {
     }
 
     private Set<Person> getConnectedPeople(){
-        var lan = getConnectedLAN();
-        return lan != null ? lan.getConnectedPeople() : emptySet();
+		var lan = getConnectedLAN();
+		return lan.isPresent() ? lan.get().getConnectedPeople() : emptySet();
     }
 
-    public LAN getConnectedLAN() {
-        return RepastUtils
-                .getAllLANsInGrid(this)
-                .stream()
-                .map(LanWithDistance::new)
-                .filter(LanWithDistance::canConnect)
-                .min((a, b) -> ((int)(a.distance - b.distance)))
-                .map(lanWithDistance -> lanWithDistance.lan)
-                .orElse(null);
-    }
+	public Optional<LAN> getConnectedLAN() {
+		return RepastUtils
+				.getAllLANsInGrid(this)
+				.stream()
+				.map(LanWithDistance::new)
+				.filter(LanWithDistance::canConnect)
+				.min((a, b) -> ((int) (a.distance - b.distance)))
+				.map(lanWithDistance -> lanWithDistance.lan);
+	}
 
     private class LanWithDistance {
         final LAN lan;
