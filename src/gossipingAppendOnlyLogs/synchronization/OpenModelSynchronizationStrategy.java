@@ -11,7 +11,8 @@ public class OpenModelSynchronizationStrategy extends SynchronizationStrategy {
 		super(local);
 	}
 
-	public void synchronize(Store remoteStore, PersonPublicKey remoteId) {
+	public void synchronize(Person remotePerson) {
+		var remoteStore = remotePerson.getStore();
 		createUnknownLogs(remoteStore.getIds());
 		updateKnownIdsWithRemoteStore(remoteStore);
 	}

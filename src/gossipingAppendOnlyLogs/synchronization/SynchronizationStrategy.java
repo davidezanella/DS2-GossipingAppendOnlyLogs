@@ -17,7 +17,7 @@ public abstract class SynchronizationStrategy {
 		this.localStore = local.getStore();
 	}
 
-	public abstract void synchronize(Store remoteStore, PersonPublicKey remoteId);
+	public abstract void synchronize(Person remotePerson);
 
 	protected void createUnknownLogs(Set<PersonPublicKey> toSync) {
 		var knownIds = localStore.getIds();

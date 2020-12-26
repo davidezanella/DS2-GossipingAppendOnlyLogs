@@ -27,9 +27,8 @@ class OpenModelSynchronizationStrategyTest {
 		// given
 		var aliceSynchronizationStrategy = new OpenModelSynchronizationStrategy(alice);
 
-		// TODO: we actually do not need to pass alice's store and key, the strategy already known Alice
 		// when
-		aliceSynchronizationStrategy.synchronize(bob.getStore(), bob.getPublicKey());
+		aliceSynchronizationStrategy.synchronize(bob);
 
 		// then
 		assertTrue(alice.getStore().getIds().contains(bob.getPublicKey()));
@@ -42,7 +41,7 @@ class OpenModelSynchronizationStrategyTest {
 		var aliceSynchronizationStrategy = new OpenModelSynchronizationStrategy(alice);
 
 		// when
-		aliceSynchronizationStrategy.synchronize(bob.getStore(), bob.getPublicKey());
+		aliceSynchronizationStrategy.synchronize(bob);
 
 		// then
 		assertEquals(1, alice.getStore().get(bob.getPublicKey()).getHeight());

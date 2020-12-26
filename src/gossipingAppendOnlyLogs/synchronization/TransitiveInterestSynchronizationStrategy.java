@@ -17,8 +17,9 @@ public class TransitiveInterestSynchronizationStrategy extends SynchronizationSt
 		super(person);
 	}
 
-	public void synchronize(Store remoteStore, PersonPublicKey remoteId) {
-		var toSync = computeIdsToSync(remoteStore, remoteId);
+	public void synchronize(Person remotePerson) {
+    	var remoteStore = remotePerson.getStore();
+		var toSync = computeIdsToSync(remoteStore, remotePerson.getPublicKey());
 		createUnknownLogs(toSync);
 		updateKnownIdsWithRemoteStore(remoteStore);
 	}

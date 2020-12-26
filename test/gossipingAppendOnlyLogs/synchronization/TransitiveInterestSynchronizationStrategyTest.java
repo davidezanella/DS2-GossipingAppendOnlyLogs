@@ -35,7 +35,7 @@ class TransitiveInterestSynchronizationStrategyTest {
 		var aliceSynchronizationStrategy = new TransitiveInterestSynchronizationStrategy(alice);
 
 		// when
-		aliceSynchronizationStrategy.synchronize(bob.getStore(), bob.getPublicKey());
+		aliceSynchronizationStrategy.synchronize(bob);
 
 		// then
 		assertTrue(alice.getStore().getIds().contains(bob.getPublicKey()));
@@ -48,7 +48,7 @@ class TransitiveInterestSynchronizationStrategyTest {
 		var aliceSynchronizationStrategy = new TransitiveInterestSynchronizationStrategy(alice);
 
 		// when
-		aliceSynchronizationStrategy.synchronize(bob.getStore(), bob.getPublicKey());
+		aliceSynchronizationStrategy.synchronize(bob);
 
 		// then
 		assertEquals(1, alice.getStore().get(bob.getPublicKey()).getHeight());
@@ -61,7 +61,7 @@ class TransitiveInterestSynchronizationStrategyTest {
 		var aliceSynchronizationStrategy = new TransitiveInterestSynchronizationStrategy(alice);
 
 		// when
-		aliceSynchronizationStrategy.synchronize(bob.getStore(), bob.getPublicKey());
+		aliceSynchronizationStrategy.synchronize(bob);
 
 		// then
 		assertTrue(alice.getStore().getIds().contains(bob.getPublicKey()));
@@ -76,7 +76,7 @@ class TransitiveInterestSynchronizationStrategyTest {
 		var aliceSynchronizationStrategy = new TransitiveInterestSynchronizationStrategy(alice);
 
 		// when
-		aliceSynchronizationStrategy.synchronize(bob.getStore(), bob.getPublicKey());
+		aliceSynchronizationStrategy.synchronize(bob);
 
 		// then
 		assertTrue(alice.getStore().getIds().contains(bob.getPublicKey()));
@@ -93,7 +93,7 @@ class TransitiveInterestSynchronizationStrategyTest {
 		var aliceSynchronizationStrategy = new TransitiveInterestSynchronizationStrategy(alice);
 
 		// when
-		aliceSynchronizationStrategy.synchronize(bob.getStore(), bob.getPublicKey());
+		aliceSynchronizationStrategy.synchronize(bob);
 
 		// then
 		assertTrue(alice.getStore().getIds().contains(bob.getPublicKey()));

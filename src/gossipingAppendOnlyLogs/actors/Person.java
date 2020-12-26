@@ -27,9 +27,9 @@ public class Person {
 	private final SynchronizationStrategy synchronizationStrategy;
 	private final MotionStrategy motionStrategy;
 	private final EventGenerationStrategy eventGenerationStrategy;
-    
-    private final List<Event> createdEvents = new ArrayList<Event>(); // for log purposes
-    public final List<Event> addedEvents = new ArrayList<Event>(); // for log purposes
+
+    private final List<Event> createdEvents = new ArrayList<>(); // for log purposes
+    public final List<Event> addedEvents = new ArrayList<>(); // for log purposes
 
 	public Person(String id, PersonKeys keys, StrategyFactory strategyFactory) {
 		this.id = id;
@@ -54,16 +54,20 @@ public class Person {
         synchronizeWithConnectedPeople();
     }
 
-    private void synchronizeWithConnectedPeople() {
-        getConnectedPeople()
-                .stream()
-                .filter(person -> person != this)
-                .forEach(person -> synchronizationStrategy.synchronize(person.store, person.getPublicKey()));
-    }
+	private void synchronizeWithConnectedPeople() {
+		getConnectedPeople().forEach(synchronizationStrategy::synchronize);
+	}
 
     private Set<Person> getConnectedPeople(){
 		var lan = getConnectedLAN();
-		return lan.isPresent() ? lan.get().getConnectedPeople() : emptySet();
+		if (lan.isEmpty()) {
+			return emptySet();
+		}
+		return lan.get()
+				.getConnectedPeople()
+				.stream()
+				.filter(person -> person != this)
+				.collect(Collectors.toSet());
     }
 
 	public Optional<LAN> getConnectedLAN() {
@@ -94,22 +98,22 @@ public class Person {
     	store.get(keys.publicKey).appendEvent(keys, event);
     	createdEvents.add(event);
 	}
-    
+
     public Store getStore() {
     	return this.store;
     }
-    
+
     //used by repast for logging purposes
     public String createdEvents() {
     	List<String> eventsStrings = createdEvents.stream()
     			.map(Event::toString)
     			.collect(Collectors.toList());
-    	
+
     	createdEvents.clear();
-    	
+
     	return String.join(",", eventsStrings);
     }
-    
+
     //used by repast for logging purposes
     public String arrivedEvents() {
     	List<String> eventsStrings = addedEvents.stream()
@@ -117,10 +121,10 @@ public class Person {
     			.collect(Collectors.toList());
 
     	addedEvents.clear();
-    	
+
     	return String.join(",", eventsStrings);
     }
-    
+
     public String getId() {
     	return id;
     }
