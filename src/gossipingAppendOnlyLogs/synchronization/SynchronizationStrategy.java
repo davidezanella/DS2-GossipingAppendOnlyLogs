@@ -25,7 +25,6 @@ public abstract class SynchronizationStrategy {
 				.filter(id -> !knownIds.contains(id))
 				.map(Log::new)
 				.forEach(localStore::add);
-		System.out.println("Added " + (localStore.getIds().size() - knownIds.size()) + " new logs");
 	}
 
 	protected void updateKnownIdsWithRemoteStore(Store remoteStore) {
