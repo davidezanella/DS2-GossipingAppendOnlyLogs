@@ -19,6 +19,10 @@ def parse_arg(argv):
     parser.add_argument('--file', type=str, help='Path to the log file', required=True)
     parser.add_argument('--lans', type=int, help='Number of LANs in the simulation', required=True)
     parser.add_argument('--persons', type=int, help='Number of persons in the simulation', required=True)
+    parser.add_argument('--mu_lans', type=int, help='Mean of the Normal distribution of the preferred LANs', required=True)
+    parser.add_argument('--std_lans', type=int, help='Std of the Normal distribution of the preferred LANs', required=True)
+    parser.add_argument('--mu_wait', type=int, help='Mean of the Normal distribution of the waiting time', required=True)
+    parser.add_argument('--std_wait', type=int, help='Std of the Normal distribution of the waiting time', required=True)
     parser.add_argument('--target', type=str, help='Csv to write to')
     return parser.parse_args(argv)
 
@@ -91,7 +95,7 @@ def latency_open(events):
     #return a dict event: latency
     return events
 
-def latency_batch_open(events, lans, persons):
+def latency_batch_open(events, lans, persons, mean_LANs, std_LANs, mean_wait, std_wait):
     rows = []
 
     for run in events:
@@ -103,6 +107,10 @@ def latency_batch_open(events, lans, persons):
                 run_latencies.append(mean_arrived_tick - events[run][event][0])
         
         rows.append({
+            'MeanPrefLANs': mean_LANs,
+            'StdPrefLANs': std_LANs,
+            'MeanWait': mean_wait,
+            'StdWait': std_wait,
             'LANs': str(lans),
             'Persons': str(persons),
             'Latency': str(statistics.mean(run_latencies))
@@ -126,7 +134,7 @@ def main():
         plot_open(latency_open(read_events_open(args.file)))
     else:
         #calculate mean of batch run and append to file
-        rows = latency_batch_open(read_batch_open(args.file), args.lans, args.persons)
+        rows = latency_batch_open(read_batch_open(args.file), args.lans, args.persons, args.mu_lans, args.std_lans, args.mu_wait, args.std_lans)
         #remove the print when editing this part
         file_exists = path.exists(args.target)
         with open(args.target, 'a') as fd:
