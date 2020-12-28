@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<sweep runs="20">
+<sweep runs="40">
 	<parameter name="stopAt" type="constant" constant_type="int"
 		value="500"></parameter>
 	<parameter name="numLANs" type="constant" constant_type="int"
