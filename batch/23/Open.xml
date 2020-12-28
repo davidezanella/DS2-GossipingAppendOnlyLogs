@@ -18,4 +18,6 @@
 		constant_type="java.lang.String" value="OpenModel"></parameter>
 	<parameter name="motionStrategy" type="constant"
 		constant_type="java.lang.String" value="HabitMotion"></parameter>
+	<parameter name="stdTicksWaitingHome" type="constant"
+																					constant_type="int" value="2"></parameter>
 </sweep>

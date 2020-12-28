@@ -18,4 +18,8 @@
 		constant_type="java.lang.String" value="HabitMotion"></parameter>
 	<parameter name="synchronizationProtocol" type="constant"
 		constant_type="java.lang.String" value="OpenModel"></parameter>
+	<parameter name="meanTicksWaitingHome" type="constant"
+			   constant_type="int" value="5"></parameter>
+	<parameter name="stdTicksWaitingHome" type="constant"
+			   constant_type="int" value="2"></parameter>
 </sweep>
