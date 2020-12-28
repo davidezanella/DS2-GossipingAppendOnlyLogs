@@ -60,14 +60,14 @@ def read_batch_open(file):
         run = row['run']
 
         if(run not in events.keys()):
-            events[run]={}
+            events[run] = {}
             
         created_events = []
         if row['createdEvents'] != "":
             created_events = row['createdEvents'].split(",")
 
         for event in created_events:
-            events[run][event] = [float(row['tick']), []]     
+            events[run][event] = [float(row['tick']), {}] 
 
     for row in csv_events:
         run = row['run']
@@ -76,7 +76,12 @@ def read_batch_open(file):
             arrived_events = row['arrivedEvents'].split(",")
 
             for event in arrived_events:
-                events[run][event][1].append(float(row['tick']))
+                if row['id'] not in events[run][event][1]:
+                    events[run][event][1][row['id']] = float(row['tick'])
+
+    for event in events:
+        for e in events[event]:
+            events[event][e][1] = list(events[event][e][1].values())
 
     #return a dict run: { event: <creation_tick, [arrival_tick1, arrival_tick2, ...]>}
     return events
@@ -100,11 +105,13 @@ def latency_batch_open(events, lans, persons, mean_LANs, std_LANs, mean_wait, st
 
     for run in events:
         run_latencies = []
+        run_reached_pers = []
 
         for event in events[run]:
             if len(events[run][event][1]) > 0:
                 mean_arrived_tick = statistics.mean(events[run][event][1])
                 run_latencies.append(mean_arrived_tick - events[run][event][0])
+            run_reached_pers.append(len(events[run][event][1]))
         
         rows.append({
             'MeanPrefLANs': mean_LANs,
@@ -113,7 +120,8 @@ def latency_batch_open(events, lans, persons, mean_LANs, std_LANs, mean_wait, st
             'StdWait': std_wait,
             'LANs': str(lans),
             'Persons': str(persons),
-            'Latency': str(statistics.mean(run_latencies))
+            'Latency': str(statistics.mean(run_latencies)),
+            'MeanReachedPersons': str(statistics.mean(run_reached_pers))
         })
 
     return rows
