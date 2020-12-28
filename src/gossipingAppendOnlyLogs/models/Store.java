@@ -50,7 +50,7 @@ public class Store {
 				var lastIndex = log.getLast();
 
 				if (lastIndex > item.last)
-					events.addAll(log.getEvents(item.last, lastIndex));
+					events.addAll(log.getEvents(item.last + 1, lastIndex));
 			}
 		}
 		return events;

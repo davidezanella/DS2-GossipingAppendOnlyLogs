@@ -1,14 +1,11 @@
 package gossipingAppendOnlyLogs.synchronization;
 
-import gossipingAppendOnlyLogs.StrategyFactory;
+import gossipingAppendOnlyLogs.Utils;
 import gossipingAppendOnlyLogs.actors.Person;
-import gossipingAppendOnlyLogs.eventGeneration.EventGenerationStrategy;
 import gossipingAppendOnlyLogs.events.StreamEvent;
-import gossipingAppendOnlyLogs.motion.MotionStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static gossipingAppendOnlyLogs.CryptographyUtils.generateKeys;
 import static org.junit.jupiter.api.Assertions.*;
 
 class OpenModelSynchronizationStrategyTest {
@@ -18,8 +15,8 @@ class OpenModelSynchronizationStrategyTest {
 
 	@BeforeEach
 	public void setup(){
-		alice = createPerson("alice");
-		bob = createPerson("bob");
+		alice = Utils.createPerson("alice");
+		bob = Utils.createPerson("bob");
 	}
 
 	@Test
@@ -47,22 +44,4 @@ class OpenModelSynchronizationStrategyTest {
 		assertEquals(1, alice.getStore().get(bob.getPublicKey()).getHeight());
 	}
 
-	private Person createPerson(String id) {
-		return new Person(id, generateKeys(), new StrategyFactory() {
-			@Override
-			public SynchronizationStrategy getCorrectStrategy(Person person) {
-				return null;
-			}
-
-			@Override
-			public MotionStrategy getMotionStrategy(Person person) {
-				return null;
-			}
-
-			@Override
-			public EventGenerationStrategy getEventGenerationStrategy(Person person) {
-				return null;
-			}
-		});
-	}
 }
