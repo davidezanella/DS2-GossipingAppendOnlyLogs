@@ -16,7 +16,7 @@ public class HabitMotionStrategy extends MotionStrategy {
 		super(person);
 	}
 	
-	private void init() {		
+	private void init() {
         var params = RunEnvironment.getInstance().getParameters();
 		
 		this.home = RepastUtils.space.getLocation(person);
@@ -30,9 +30,11 @@ public class HabitMotionStrategy extends MotionStrategy {
 			preferredLAN.add(RepastUtils.getAllLANsInGrid(person).get(LANIndex));
 		}
 
-		var normalDistr = RandomHelper.createNormal(params.getInteger("meanTicksWaiting"), params.getInteger("stdTicksWaiting"));
-		this.ticksSpentAtHome = Math.max(0, normalDistr.nextInt());
-		this.ticksSpentAtLAN = Math.max(0, normalDistr.nextInt());
+		var normalDistrHome = RandomHelper.createNormal(params.getInteger("meanTicksWaitingHome"), params.getInteger("stdTicksWaitingHome"));
+		this.ticksSpentAtHome = Math.max(0, normalDistrHome.nextInt());
+
+		var normalDistrLAN = RandomHelper.createNormal(params.getInteger("meanTicksWaiting"), params.getInteger("stdTicksWaiting"));
+		this.ticksSpentAtLAN = Math.max(0, normalDistrLAN.nextInt());
 	}
 
 	private NdPoint targetPoint;
