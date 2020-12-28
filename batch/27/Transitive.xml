@@ -5,7 +5,7 @@
 	<parameter name="numLANs" type="constant" constant_type="int"
 		value="10"></parameter>
 	<parameter name="numPeople" type="constant"
-		constant_type="int" value="15"></parameter>
+		constant_type="int" value="50"></parameter>
 	<parameter name="meanPrefLANs" type="constant"
 		constant_type="int" value="3"></parameter>
 	<parameter name="stdPrefLANs" type="constant"
