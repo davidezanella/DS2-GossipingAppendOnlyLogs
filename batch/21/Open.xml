@@ -11,7 +11,7 @@
 	<parameter name="stdPrefLANs" type="constant"
 		constant_type="int" value="2"></parameter>
 	<parameter name="meanTicksWaiting" type="constant"
-		constant_type="int" value="8"></parameter>
+		constant_type="int" value="10"></parameter>
 	<parameter name="stdTicksWaiting" type="constant"
 		constant_type="int" value="5"></parameter>
 	<parameter name="synchronizationProtocol" type="constant"
