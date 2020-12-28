@@ -1,7 +1,5 @@
 <?xml version="1.0" ?>
 <sweep runs="20">
-	<parameter name="randomSeed" type="constant"
-		constant_type="int" value="123456789"></parameter>
 	<parameter name="stopAt" type="constant" constant_type="int"
 		value="500"></parameter>
 	<parameter name="numLANs" type="constant" constant_type="int"
@@ -16,8 +14,8 @@
 		constant_type="int" value="5"></parameter>
 	<parameter name="stdPrefLANs" type="constant"
 		constant_type="int" value="1"></parameter>
-	<parameter name="synchronizationProtocol" type="constant"
-		constant_type="java.lang.String" value="OpenModel"></parameter>
 	<parameter name="motionStrategy" type="constant"
 		constant_type="java.lang.String" value="HabitMotion"></parameter>
+	<parameter name="synchronizationProtocol" type="constant"
+		constant_type="java.lang.String" value="OpenModel"></parameter>
 </sweep>
