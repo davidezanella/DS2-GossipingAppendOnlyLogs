@@ -9,6 +9,7 @@ import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.grid.Grid;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,18 +24,33 @@ public class RepastUtils {
     public static int lastEventId = -1; // used for logging purposes
     public static int lastSpecialEventId = -1; // used for logging purposes, special events are follows/unfollows/...
 
+	private static final List<Person> people = new ArrayList<>();
+	private static final List<LAN> LANs = new ArrayList<>();
+
+	public static void init (Grid<Object> grid, Context<Object> context, ContinuousSpace<Object> space) {
+		RepastUtils.grid = grid;
+		RepastUtils.context = context;
+		RepastUtils.space = space;
+		people.clear();
+		LANs.clear();
+	}
+
+	public static void addLAN(LAN lan) {
+		context.add(lan);
+		LANs.add(lan);
+	}
+
+	public static void addPerson(Person person) {
+		context.add(person);
+		people.add(person);
+	}
+
     public static List<LAN> getAllLANsInGrid() {
-		return context.stream()
-				.filter(LAN.class::isInstance)
-				.map(actor -> (LAN) actor)
-				.collect(Collectors.toList());
+		return Collections.unmodifiableList(LANs);
     }
 
     public static List<Person> getAllPeopleInGrid() {
-        return context.stream()
-				.filter(Person.class::isInstance)
-				.map(actor -> (Person) actor)
-				.collect(Collectors.toList());
+		return Collections.unmodifiableList(people);
     }
 
     public static double getDistance(Person person, LAN lan) {

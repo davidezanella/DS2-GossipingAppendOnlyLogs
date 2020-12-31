@@ -64,9 +64,7 @@ public class ProjectBuilder implements ContextBuilder<Object> {
                 )
         );
 
-        RepastUtils.grid = grid;
-        RepastUtils.context = context;
-        RepastUtils.space = space;
+        RepastUtils.init(grid, context, space);
 
         var params = RunEnvironment.getInstance().getParameters();
 
@@ -111,7 +109,7 @@ public class ProjectBuilder implements ContextBuilder<Object> {
         for (int i = 0; i < numLANs; i++) {
             var id = "LAN" + i;
             LAN lan = new LAN(id);
-            context.add(lan);
+            RepastUtils.addLAN(lan);
             
             var position = possiblePositions.remove(RandomHelper.nextIntFromTo(0, possiblePositions.size() - 1));
             var y = Math.ceil(position / grid_lans_size) * LANs_GRID_FACTOR;
@@ -125,7 +123,7 @@ public class ProjectBuilder implements ContextBuilder<Object> {
         for (int i = 0; i < numPeople; i++) {
             var id = "Person" + i;
             Person p = new Person(id, CryptographyUtils.generateKeys(), strategyFactory);
-            context.add(p);
+            RepastUtils.addPerson(p);
             
             randomlyMoveAgent(p);
         }
