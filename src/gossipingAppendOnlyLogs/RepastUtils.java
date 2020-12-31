@@ -9,6 +9,7 @@ import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
 import repast.simphony.space.grid.Grid;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -24,27 +25,15 @@ public class RepastUtils {
     public static int lastEventId = -1; // used for logging purposes
     public static int lastSpecialEventId = -1; // used for logging purposes, special events are follows/unfollows/...
 
+	private static final List<Person> people = new ArrayList<>();
+	private static final List<LAN> LANs = new ArrayList<>();
+
     public static List<LAN> getAllLANsInGrid(Object actor) {
-        return getAllActorsInGrid(actor, LAN.class);
+        return LANs;
     }
 
     public static List<Person> getAllPeopleInGrid(Object actor) {
-        return getAllActorsInGrid(actor, Person.class);
-    }
-
-    private static <T> List<T> getAllActorsInGrid(Object actor, Class<T> clazz) {
-        if (space == null) {
-            throw new IllegalStateException("'space' has not been initialized");
-        }
-        var pt = grid.getLocation(actor);
-        var extentX = grid.getDimensions().getWidth() / 2;
-        var extentY = grid.getDimensions().getHeight() / 2;
-        GridCellNgh<T> nghCreator = new GridCellNgh<T>(grid, pt, clazz, extentX, extentY);
-        return nghCreator
-                .getNeighborhood(true)
-                .stream()
-                .flatMap(cell -> StreamSupport.stream(cell.items().spliterator(), false))
-                .collect(Collectors.toList());
+        return people;
     }
 
     public static double getDistance(Person person, LAN lan) {
@@ -90,4 +79,14 @@ public class RepastUtils {
     	lastSpecialEventId++;
     	return "UnblockEvent" + lastSpecialEventId;
     }
+
+	public static void addLAN(LAN lan) {
+		context.add(lan);
+		LANs.add(lan);
+	}
+
+	public static void addPerson(Person p) {
+		context.add(p);
+		people.add(p);
+	}
 }

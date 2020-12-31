@@ -9,6 +9,7 @@ import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.environment.RunListener;
 import repast.simphony.parameter.Parameters;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
@@ -37,6 +38,8 @@ public class ProjectBuilder implements ContextBuilder<Object> {
     private ContinuousSpace<Object> space;
 
     private Grid<Object> grid;
+
+    private long simulationStartedAt;
 
     @Override
     public Context<Object> build(Context<Object> context) {
@@ -71,7 +74,30 @@ public class ProjectBuilder implements ContextBuilder<Object> {
         createPeople(params);
 
         int maxTicks = params.getInteger("stopAt");
-        RunEnvironment.getInstance().endAt(maxTicks);
+		RunEnvironment.getInstance().endAt(maxTicks);
+		RunEnvironment.getInstance().addRunListener(new RunListener() {
+			@Override
+			public void stopped() {
+				System.out.println("Simulation stopped");
+				System.out.println("Simulation took " + (System.currentTimeMillis() - simulationStartedAt) + "ms");
+			}
+
+			@Override
+			public void paused() {
+				System.out.println("Simulation paused");
+			}
+
+			@Override
+			public void started() {
+				System.out.println("Simulation started");
+				simulationStartedAt = System.currentTimeMillis();
+			}
+
+			@Override
+			public void restarted() {
+				System.out.println("Simulation restarted");
+			}
+		});
 
         return context;
     }
@@ -85,12 +111,11 @@ public class ProjectBuilder implements ContextBuilder<Object> {
         for (int i = 0; i < numLANs; i++) {
             var id = "LAN" + i;
             LAN lan = new LAN(id);
-            context.add(lan);
+            RepastUtils.addLAN(lan);
             
             var position = possiblePositions.remove(RandomHelper.nextIntFromTo(0, possiblePositions.size() - 1));
             var y = Math.ceil(position / grid_lans_size) * LANs_GRID_FACTOR;
             var x = (position % grid_lans_size) * LANs_GRID_FACTOR;
-
             RepastUtils.moveTo(lan, x, y);
         }
     }
@@ -100,7 +125,7 @@ public class ProjectBuilder implements ContextBuilder<Object> {
         for (int i = 0; i < numPeople; i++) {
             var id = "Person" + i;
             Person p = new Person(id, CryptographyUtils.generateKeys(), strategyFactory);
-            context.add(p);
+            RepastUtils.addPerson(p);
             
             randomlyMoveAgent(p);
         }
