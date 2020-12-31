@@ -112,7 +112,7 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 
 	private Set<PersonPublicKey> getAllPeople() {
 		return RepastUtils
-				.getAllPeopleInGrid(person)
+				.getAllPeopleInGrid()
 				.stream()
 				.map(Person::getPublicKey)
 				.collect(Collectors.toSet());

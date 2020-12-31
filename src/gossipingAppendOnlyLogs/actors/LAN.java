@@ -15,7 +15,7 @@ public class LAN {
 	}
 
 	public Set<Person> getConnectedPeople() {
-		return RepastUtils.getAllPeopleInGrid(this)
+		return RepastUtils.getAllPeopleInGrid()
 				.stream()
 				.filter(p -> {
 					var lan = p.getConnectedLAN();

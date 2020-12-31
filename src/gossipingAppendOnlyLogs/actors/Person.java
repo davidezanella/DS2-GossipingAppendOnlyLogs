@@ -72,7 +72,7 @@ public class Person {
 
 	public Optional<LAN> getConnectedLAN() {
 		return RepastUtils
-				.getAllLANsInGrid(this)
+				.getAllLANsInGrid()
 				.stream()
 				.map(LanWithDistance::new)
 				.filter(LanWithDistance::canConnect)

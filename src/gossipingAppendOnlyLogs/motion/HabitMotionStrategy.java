@@ -58,11 +58,11 @@ public class HabitMotionStrategy extends MotionStrategy {
 
 		var numLANs = Math.max(1,
 				RandomHelper.createNormal(params.getInteger("meanPrefLANs"), params.getInteger("stdPrefLANs")).nextInt());
-		var totLANs = RepastUtils.getAllLANsInGrid(person).size();
+		var totLANs = RepastUtils.getAllLANsInGrid().size();
 		for (var i = 0; i < numLANs; i++) {
 			// Note that the same LAN could be sampled more times
 			var LANIndex = RandomHelper.nextIntFromTo(0, totLANs - 1);
-			preferredLAN.add(RepastUtils.getAllLANsInGrid(person).get(LANIndex));
+			preferredLAN.add(RepastUtils.getAllLANsInGrid().get(LANIndex));
 		}
 
 		var normalDistrHome = RandomHelper.createNormal(params.getInteger("meanTicksWaitingHome"), params.getInteger("stdTicksWaitingHome"));

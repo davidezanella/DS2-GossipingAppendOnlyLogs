@@ -3,7 +3,6 @@ package gossipingAppendOnlyLogs;
 import gossipingAppendOnlyLogs.actors.LAN;
 import gossipingAppendOnlyLogs.actors.Person;
 import repast.simphony.context.Context;
-import repast.simphony.query.space.grid.GridCellNgh;
 import repast.simphony.random.RandomHelper;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.NdPoint;
@@ -12,7 +11,6 @@ import repast.simphony.space.grid.Grid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class RepastUtils {
 
@@ -25,15 +23,18 @@ public class RepastUtils {
     public static int lastEventId = -1; // used for logging purposes
     public static int lastSpecialEventId = -1; // used for logging purposes, special events are follows/unfollows/...
 
-	private static final List<Person> people = new ArrayList<>();
-	private static final List<LAN> LANs = new ArrayList<>();
-
-    public static List<LAN> getAllLANsInGrid(Object actor) {
-        return LANs;
+    public static List<LAN> getAllLANsInGrid() {
+		return context.stream()
+				.filter(LAN.class::isInstance)
+				.map(actor -> (LAN) actor)
+				.collect(Collectors.toList());
     }
 
-    public static List<Person> getAllPeopleInGrid(Object actor) {
-        return people;
+    public static List<Person> getAllPeopleInGrid() {
+        return context.stream()
+				.filter(Person.class::isInstance)
+				.map(actor -> (Person) actor)
+				.collect(Collectors.toList());
     }
 
     public static double getDistance(Person person, LAN lan) {
@@ -79,14 +80,4 @@ public class RepastUtils {
     	lastSpecialEventId++;
     	return "UnblockEvent" + lastSpecialEventId;
     }
-
-	public static void addLAN(LAN lan) {
-		context.add(lan);
-		LANs.add(lan);
-	}
-
-	public static void addPerson(Person p) {
-		context.add(p);
-		people.add(p);
-	}
 }
