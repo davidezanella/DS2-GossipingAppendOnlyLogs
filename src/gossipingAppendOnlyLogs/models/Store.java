@@ -58,12 +58,11 @@ public class Store {
 
 	public void update(List<Event> remoteEvents) {
 		for (var e : remoteEvents) {
-			// this if condition should be removed once Transient interest sync is fixed
-			if (logs.containsKey(e.getCreatorId())) {
-				// I'm interested only in log ids that I already know
-				var log = logs.get(e.getCreatorId());
-				log.update(Collections.singletonList(e));
+			var log = logs.get(e.getCreatorId());
+			if (log == null) {
+				throw new IllegalStateException("updates list contains an event belonging to an unknown log");
 			}
+			log.update(e);
 		}
 	}
 

@@ -16,13 +16,5 @@ public class FollowEvent extends Event {
     protected EventContentHash hashContent() {
         return new EventContentHash(followedPerson.hash());
     }
-    
-    @Override
-    public void sign(PersonKeys keys, EventHash previousEventHash) {
-        this.creatorId = keys.publicKey;
-        this.previousEventHash = previousEventHash;
-        this.signature = EventSignature.of(this, keys);
-        
-        this.uniqueId = RepastUtils.getNewFollowEventId();
-    }
+
 }

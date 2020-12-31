@@ -32,13 +32,17 @@ public class Log {
 		return toReturn;
 	}
 
-	public void update(List<Event> remoteEvents) {
-		remoteEvents
-				.stream()
-				.filter(e -> e.getCreatorId().equals(id))
-				.filter(e -> !containsEvent(e))
-				.filter(this::mayBeNextEvent)
-				.forEach(events::add);
+	public void update(Event remoteEvent) {
+		if (!remoteEvent.getCreatorId().equals(id)) {
+			throw new IllegalArgumentException("remoteEvent does not belong to this log");
+		}
+		if (containsEvent(remoteEvent)) {
+			throw new IllegalStateException("this Log already contains the remoteEvent");
+		}
+		if (!mayBeNextEvent(remoteEvent)) {
+			throw new IllegalArgumentException("even is not compatible");
+		}
+		events.add(remoteEvent);
 	}
 
 	private boolean containsEvent(Event a) {
@@ -47,16 +51,17 @@ public class Log {
 				.anyMatch(b -> b.hash().equals(a.hash()));
 	}
 
+
 	private boolean mayBeNextEvent(Event e) {
 		if (events.isEmpty()) {
 			return true;
 		}
-		var lastEvent = events.get(events.size() - 1);
+		var lastEvent = events.get(getLast());
 		return lastEvent.hash().equals(e.getPreviousEventHash());
 	}
 
 	public void appendEvent(PersonKeys keysOfLogOwner, Event event) {
-		var previousHash = events.isEmpty() ? null : events.get(events.size() - 1).hash();
+		var previousHash = events.isEmpty() ? null : events.get(getLast()).hash();
 		event.sign(keysOfLogOwner, previousHash);
 		events.add(event);
 	}
