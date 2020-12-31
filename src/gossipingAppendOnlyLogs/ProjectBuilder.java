@@ -45,6 +45,7 @@ public class ProjectBuilder implements ContextBuilder<Object> {
     public Context<Object> build(Context<Object> context) {
         this.context = context;
         context.setId("GossipingAppendOnlyLogs");
+		System.out.println("Using random seed " + RandomHelper.getSeed());
 
         this.space = spaceFactory.createContinuousSpace(
                 "space",
