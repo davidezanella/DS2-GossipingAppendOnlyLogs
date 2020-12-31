@@ -21,14 +21,14 @@ public class HabitMotionStrategy extends MotionStrategy {
 	private NdPoint home;
 	private int ticksSpentAtHome;
 	private int ticksSpentAtLAN;
-	private Integer waitingTicks;
+	private int waitingTicks = -1;
 
 	@Override
 	public void onTick() {
 		if(home == null) {
 			init();
 		}
-		if(waitingTicks == null) {
+		if (waitingTicks == -1) {
 			if (targetPoint == null) {
 				if (person.getConnectedLAN().isPresent()) {
 					// I'm just arrived in a LAN
@@ -45,8 +45,8 @@ public class HabitMotionStrategy extends MotionStrategy {
 			}
 		} else {
 			waitingTicks--;
-			if (waitingTicks.equals(0)) {
-				waitingTicks = null;
+			if (waitingTicks == 0) {
+				waitingTicks = -1;
 			}
 		}
 	}
