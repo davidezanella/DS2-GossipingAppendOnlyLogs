@@ -142,7 +142,7 @@ def main():
         plot_open(latency_open(read_events_open(args.file)))
     else:
         #calculate mean of batch run and append to file
-        rows = latency_batch_open(read_batch_open(args.file), args.lans, args.persons, args.mu_lans, args.std_lans, args.mu_wait, args.std_lans)
+        rows = latency_batch_open(read_batch_open(args.file), args.lans, args.persons, args.mu_lans, args.std_lans, args.mu_wait, args.std_wait)
         #remove the print when editing this part
         file_exists = path.exists(args.target)
         with open(args.target, 'a') as fd:

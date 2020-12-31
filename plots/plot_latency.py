@@ -81,8 +81,9 @@ def read_latencies(file, plot_type):
 def plot(latencies, reached_pers, plot_type):
     fig = plt.figure()
     ax = fig.gca()
-    ax2 = ax.twinx()
-    ax2_color = 'tab:orange'
+    if plot_type != "Basic":
+        ax2 = ax.twinx()
+        ax2_color = 'tab:orange'
 
     for label in latencies:
         xs, ys, zs = [], [], []
@@ -102,10 +103,12 @@ def plot(latencies, reached_pers, plot_type):
         label_txt = get_plot_series_label(label, plot_type)
         ax.plot(xs, ys, label=label_txt, alpha=0.4)
         ax.scatter(xs, ys, s=zs, marker='o')
-        ax2.plot(xs, rp, color=ax2_color, alpha=0.8)
+        if plot_type != "Basic":
+            ax2.plot(xs, rp, color=ax2_color, alpha=0.8)
 
-    ax2.set_ylabel('Number of reached people', color=ax2_color)
-    ax2.tick_params(axis='y', labelcolor=ax2_color)
+    if plot_type != "Basic":
+        ax2.set_ylabel('Number of reached people', color=ax2_color)
+        ax2.tick_params(axis='y', labelcolor=ax2_color)
 
     x_lbl, y_lbl = get_plot_xy_label(plot_type)
     ax.set_xlabel(x_lbl)
