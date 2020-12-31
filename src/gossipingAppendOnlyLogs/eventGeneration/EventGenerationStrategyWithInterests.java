@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 public class EventGenerationStrategyWithInterests extends EventGenerationStrategy {
 
+	private static final String streamEventContent = "Some content";
+
 	public EventGenerationStrategyWithInterests(Person person) {
 		super(person);
 		var params = ScheduleParameters.createUniformProbabilityRepeating(10, 0, 100, 50, 1);
@@ -26,7 +28,7 @@ public class EventGenerationStrategyWithInterests extends EventGenerationStrateg
 	 */
 	@Override
 	public void generateEvent() {
-		var event = new StreamEvent("Some content");
+		var event = new StreamEvent(streamEventContent);
 		person.addEventToPersonalLog(event);
 	}
 
