@@ -56,6 +56,9 @@ def plot(results_for_configuration, type):
     if type and type == 'MeanWait':
         x_key = 'MeanWait'
         x_label = r'$\mu_{wait}$'
+    if type and type == 'MeanPrefLANs':
+        x_key = 'MeanPrefLANs'
+        x_label = r'$\mu_{PrefLANs}$'
         
     x = [int(result[x_key]) for result in results_for_configuration]
     y = [int(result[y_key]) for result in results_for_configuration]
