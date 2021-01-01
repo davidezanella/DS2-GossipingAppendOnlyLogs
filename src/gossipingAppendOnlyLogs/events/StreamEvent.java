@@ -2,7 +2,6 @@ package gossipingAppendOnlyLogs.events;
 
 
 import gossipingAppendOnlyLogs.HashUtils;
-import gossipingAppendOnlyLogs.RepastUtils;
 
 public class StreamEvent extends Event {
      public final String content;
@@ -13,7 +12,8 @@ public class StreamEvent extends Event {
 
 	@Override
 	protected String generateUniqueId() {
-		return RepastUtils.getNewEventId();
+		lastEventId++;
+		return "Event" + lastEventId;
 	}
 
 	@Override

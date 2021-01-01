@@ -9,7 +9,6 @@ import repast.simphony.space.continuous.NdPoint;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class HabitMotionStrategy extends MotionStrategy {
 

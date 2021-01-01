@@ -1,9 +1,6 @@
 package gossipingAppendOnlyLogs.synchronization;
 
 import gossipingAppendOnlyLogs.actors.Person;
-import gossipingAppendOnlyLogs.models.Log;
-import gossipingAppendOnlyLogs.models.PersonPublicKey;
-import gossipingAppendOnlyLogs.models.Store;
 
 public class OpenModelSynchronizationStrategy extends SynchronizationStrategy {
 

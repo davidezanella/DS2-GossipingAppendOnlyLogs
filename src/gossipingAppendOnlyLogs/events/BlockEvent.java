@@ -1,7 +1,5 @@
 package gossipingAppendOnlyLogs.events;
 
-import gossipingAppendOnlyLogs.RepastUtils;
-import gossipingAppendOnlyLogs.models.PersonKeys;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 
 public class BlockEvent extends Event {
@@ -13,7 +11,8 @@ public class BlockEvent extends Event {
 
 	@Override
 	protected String generateUniqueId() {
-		return RepastUtils.getNewBlockEventId();
+		lastSpecialEventId++;
+		return "BlockEvent" + lastSpecialEventId;
 	}
 
     @Override

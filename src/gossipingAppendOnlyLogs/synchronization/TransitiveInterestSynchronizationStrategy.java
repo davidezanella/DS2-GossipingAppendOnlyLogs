@@ -1,15 +1,11 @@
 package gossipingAppendOnlyLogs.synchronization;
 
 import gossipingAppendOnlyLogs.actors.Person;
-import gossipingAppendOnlyLogs.models.Log;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 import gossipingAppendOnlyLogs.models.Store;
 
-import java.security.PublicKey;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TransitiveInterestSynchronizationStrategy extends SynchronizationStrategy {
 

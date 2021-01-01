@@ -1,7 +1,5 @@
 package gossipingAppendOnlyLogs.events;
 
-import gossipingAppendOnlyLogs.RepastUtils;
-import gossipingAppendOnlyLogs.models.PersonKeys;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 
 public class UnfollowEvent extends Event {
@@ -14,7 +12,8 @@ public class UnfollowEvent extends Event {
 
 	@Override
 	protected String generateUniqueId() {
-		return RepastUtils.getNewUnfollowEventId();
+		lastSpecialEventId++;
+		return "UnfollowEvent" + lastSpecialEventId;
 	}
 
     @Override

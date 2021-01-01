@@ -11,7 +11,6 @@ import repast.simphony.space.grid.Grid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RepastUtils {
 
@@ -20,9 +19,6 @@ public class RepastUtils {
     public static Context<Object> context;
 
     public static ContinuousSpace<Object> space;
-    
-    public static int lastEventId = -1; // used for logging purposes
-    public static int lastSpecialEventId = -1; // used for logging purposes, special events are follows/unfollows/...
 
 	private static final List<Person> people = new ArrayList<>();
 	private static final List<LAN> LANs = new ArrayList<>();
@@ -71,29 +67,4 @@ public class RepastUtils {
 				RandomHelper.nextIntFromTo(0, (int) space.getDimensions().getHeight() - 1)
 		);
 	}
-    
-    public static String getNewEventId() {
-    	lastEventId++;
-    	return "Event" + lastEventId;
-    }
-    
-    public static String getNewFollowEventId() {
-    	lastSpecialEventId++;
-    	return "FollowEvent" + lastSpecialEventId;
-    }
-    
-    public static String getNewUnfollowEventId() {
-    	lastSpecialEventId++;
-    	return "UnfollowEvent" + lastSpecialEventId;
-    }
-    
-    public static String getNewBlockEventId() {
-    	lastSpecialEventId++;
-    	return "BlockEvent" + lastSpecialEventId;
-    }
-    
-    public static String getNewUnblockEventId() {
-    	lastSpecialEventId++;
-    	return "UnblockEvent" + lastSpecialEventId;
-    }
 }

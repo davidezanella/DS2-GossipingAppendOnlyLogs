@@ -1,11 +1,13 @@
 package gossipingAppendOnlyLogs.events;
 
-import gossipingAppendOnlyLogs.RepastUtils;
 import gossipingAppendOnlyLogs.models.PersonKeys;
 import gossipingAppendOnlyLogs.models.PersonPublicKey;
 
 
 public abstract class Event {
+
+	protected static int lastEventId = -1; // used for logging purposes
+	protected static int lastSpecialEventId = -1; // used for logging purposes, special events are follows/unfollows/...
 
     protected PersonPublicKey creatorId;
     protected EventHash previousEventHash;
