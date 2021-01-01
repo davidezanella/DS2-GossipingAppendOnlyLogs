@@ -12,6 +12,9 @@ import java.util.List;
 
 public class HabitMotionStrategy extends MotionStrategy {
 
+	private final double STEP_SIZE = 0.5;
+	private final double REACHED_TARGET_THRESHOLD = STEP_SIZE + 0.1;
+
 	public HabitMotionStrategy(Person person) {
 		super(person);
 	}
@@ -21,7 +24,7 @@ public class HabitMotionStrategy extends MotionStrategy {
 	private NdPoint home;
 	private int ticksSpentAtHome;
 	private int ticksSpentAtLAN;
-	private int waitingTicks = -1;
+	private int remainingTicksAtCurrentPosition = -1;
 	private LAN targetLAN;
 
 	@Override
@@ -29,28 +32,12 @@ public class HabitMotionStrategy extends MotionStrategy {
 		if (home == null) {
 			init();
 		}
-		if (waitingTicks == -1) {
-			if (targetPoint == null) {
-				var currentLAN = person.getConnectedLAN();
-				if (currentLAN.isPresent() && currentLAN.get().equals(targetLAN)) {
-					// I'm just arrived in a LAN
-					targetPoint = home;
-					waitingTicks = ticksSpentAtLAN + RandomHelper.nextIntFromTo(0, 3);
-					targetLAN = null;
-				} else {
-					// I'm just arrived at home
-					targetLAN = preferredLAN.get(RandomHelper.nextIntFromTo(0, preferredLAN.size() - 1));
-					targetPoint = RepastUtils.space.getLocation(targetLAN);
-					waitingTicks = ticksSpentAtHome + RandomHelper.nextIntFromTo(0, 3);
-				}
-			} else {
-				moveTowardsTarget();
-			}
+		if (isStayingAtPlace()) {
+			stayAtPlace();
+		} else if (isTargetReached()) {
+			onTargetReached();
 		} else {
-			waitingTicks--;
-			if (waitingTicks == 0) {
-				waitingTicks = -1;
-			}
+			moveTowardsTarget();
 		}
 	}
 
@@ -59,20 +46,53 @@ public class HabitMotionStrategy extends MotionStrategy {
 
 		this.home = RepastUtils.space.getLocation(person);
 
-		var numLANs = Math.max(1,
-				RandomHelper.createNormal(params.getInteger("meanPrefLANs"), params.getInteger("stdPrefLANs")).nextInt());
-		var totLANs = RepastUtils.getAllLANsInGrid().size();
-		for (var i = 0; i < numLANs; i++) {
-			// Note that the same LAN could be sampled more times
-			var LANIndex = RandomHelper.nextIntFromTo(0, totLANs - 1);
-			preferredLAN.add(RepastUtils.getAllLANsInGrid().get(LANIndex));
-		}
+		pickPreferredLANs(params.getInteger("meanPrefLANs"), params.getInteger("stdPrefLANs"));
 
 		var normalDistrHome = RandomHelper.createNormal(params.getInteger("meanTicksWaitingHome"), params.getInteger("stdTicksWaitingHome"));
 		this.ticksSpentAtHome = Math.max(0, normalDistrHome.nextInt());
 
 		var normalDistrLAN = RandomHelper.createNormal(params.getInteger("meanTicksWaiting"), params.getInteger("stdTicksWaiting"));
 		this.ticksSpentAtLAN = Math.max(0, normalDistrLAN.nextInt());
+	}
+
+	private void pickPreferredLANs(int meanPrefLANs, int stdPrefLANs) {
+		var preferredLANsCount = Math.max(1, RandomHelper.createNormal(meanPrefLANs, stdPrefLANs).nextInt());
+		var LANs = RepastUtils.getAllLANsInGrid();
+		var totLANs = LANs.size();
+		for (var i = 0; i < preferredLANsCount; i++) {
+			// Note that the same LAN could be sampled more times
+			var LANIndex = RandomHelper.nextIntFromTo(0, totLANs - 1);
+			preferredLAN.add(LANs.get(LANIndex));
+		}
+	}
+
+	private boolean isStayingAtPlace() {
+		return remainingTicksAtCurrentPosition != -1;
+	}
+
+	private void stayAtPlace() {
+		remainingTicksAtCurrentPosition--;
+		if (remainingTicksAtCurrentPosition == 0) {
+			remainingTicksAtCurrentPosition = -1;
+		}
+	}
+
+	private boolean isTargetReached() {
+		return targetPoint == null;
+	}
+
+	private void onTargetReached() {
+		if (targetLAN != null) {
+			// I'm just arrived in a LAN
+			targetPoint = home;
+			remainingTicksAtCurrentPosition = ticksSpentAtLAN + RandomHelper.nextIntFromTo(0, 3);
+			targetLAN = null;
+		} else {
+			// I'm just arrived at home
+			targetLAN = preferredLAN.get(RandomHelper.nextIntFromTo(0, preferredLAN.size() - 1));
+			targetPoint = RepastUtils.space.getLocation(targetLAN);
+			remainingTicksAtCurrentPosition = ticksSpentAtHome + RandomHelper.nextIntFromTo(0, 3);
+		}
 	}
 
 	private void moveTowardsTarget() {
@@ -82,15 +102,15 @@ public class HabitMotionStrategy extends MotionStrategy {
 		for (int i = 0; i < 2; i++) {
 			double difference = personCoords[i] - targetCoords[i];
 			if (difference > 0) {
-				personCoords[i] -= 0.5;
+				personCoords[i] -= STEP_SIZE;
 			} else {
-				personCoords[i] += 0.5;
+				personCoords[i] += STEP_SIZE;
 			}
 		}
 
 		RepastUtils.moveTo(person, personCoords[0], personCoords[1]);
 
-		if (RepastUtils.space.getDistance(RepastUtils.space.getLocation(person), targetPoint) <= 0.6) {
+		if (RepastUtils.space.getDistance(RepastUtils.space.getLocation(person), targetPoint) <= REACHED_TARGET_THRESHOLD) {
 			targetPoint = null;
 		}
 	}
