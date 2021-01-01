@@ -12,6 +12,11 @@ public class UnfollowEvent extends Event {
         this.unfollowedPerson = unfollowedPerson;
     }
 
+	@Override
+	protected String generateUniqueId() {
+		return RepastUtils.getNewUnfollowEventId();
+	}
+
     @Override
     protected EventContentHash hashContent() {
         return new EventContentHash(unfollowedPerson.hash());

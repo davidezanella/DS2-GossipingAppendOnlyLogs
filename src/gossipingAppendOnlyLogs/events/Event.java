@@ -11,7 +11,7 @@ public abstract class Event {
     protected EventHash previousEventHash;
     protected EventSignature signature;
     
-    protected final String uniqueId = RepastUtils.getNewEventId(); // used for logging purposes only
+    protected String uniqueId; // used for logging purposes only
 
 	protected EventHash hashAfterSignature;
 
@@ -19,11 +19,14 @@ public abstract class Event {
 		if (hashAfterSignature != null) {
 			throw new IllegalStateException("event has already been signed");
 		}
+		this.uniqueId = generateUniqueId();
 		this.creatorId = keys.publicKey;
 		this.previousEventHash = previousEventHash;
 		this.signature = EventSignature.of(this, keys);
 		hashAfterSignature = EventHash.of(this);
 	}
+
+	protected abstract String generateUniqueId();
 
     protected abstract EventContentHash hashContent();
 

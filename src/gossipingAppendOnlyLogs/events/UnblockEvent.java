@@ -11,6 +11,11 @@ public class UnblockEvent extends Event {
         this.unblockedPerson = unblockedPerson;
     }
 
+	@Override
+	protected String generateUniqueId() {
+		return RepastUtils.getNewUnblockEventId();
+	}
+
     @Override
     protected EventContentHash hashContent() {
         return new EventContentHash(unblockedPerson.hash());

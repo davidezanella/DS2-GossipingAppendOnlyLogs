@@ -11,6 +11,11 @@ public class BlockEvent extends Event {
         this.blockedPerson = blockedPerson;
     }
 
+	@Override
+	protected String generateUniqueId() {
+		return RepastUtils.getNewBlockEventId();
+	}
+
     @Override
     protected EventContentHash hashContent() {
         return new EventContentHash(blockedPerson.hash());

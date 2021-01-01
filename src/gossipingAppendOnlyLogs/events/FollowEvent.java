@@ -12,6 +12,11 @@ public class FollowEvent extends Event {
         this.followedPerson = followedPerson;
     }
 
+	@Override
+	protected String generateUniqueId() {
+		return RepastUtils.getNewFollowEventId();
+	}
+
     @Override
     protected EventContentHash hashContent() {
         return new EventContentHash(followedPerson.hash());
