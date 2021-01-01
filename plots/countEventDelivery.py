@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import statistics
 
 '''
-Simple script that plots the number of events created during the simulation.
-Should be used with a transitive interest model, since it counts the type of events created
+Simple script that plots the number of events delivered during the simulation.
+Should be used with a transitive interest model, since it counts the type of events delivered
 and in the open model we only have 1 type of event!
 '''
 
