@@ -9,6 +9,7 @@ import repast.simphony.space.continuous.NdPoint;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class HabitMotionStrategy extends MotionStrategy {
 
@@ -22,21 +23,24 @@ public class HabitMotionStrategy extends MotionStrategy {
 	private int ticksSpentAtHome;
 	private int ticksSpentAtLAN;
 	private int waitingTicks = -1;
+	private LAN targetLAN;
 
 	@Override
 	public void onTick() {
-		if(home == null) {
+		if (home == null) {
 			init();
 		}
 		if (waitingTicks == -1) {
 			if (targetPoint == null) {
-				if (person.getConnectedLAN().isPresent()) {
+				var currentLAN = person.getConnectedLAN();
+				if (currentLAN.isPresent() && currentLAN.get().equals(targetLAN)) {
 					// I'm just arrived in a LAN
 					targetPoint = home;
 					waitingTicks = ticksSpentAtLAN + RandomHelper.nextIntFromTo(0, 3);
+					targetLAN = null;
 				} else {
 					// I'm just arrived at home
-					var targetLAN = preferredLAN.get(RandomHelper.nextIntFromTo(0, preferredLAN.size() - 1));
+					targetLAN = preferredLAN.get(RandomHelper.nextIntFromTo(0, preferredLAN.size() - 1));
 					targetPoint = RepastUtils.space.getLocation(targetLAN);
 					waitingTicks = ticksSpentAtHome + RandomHelper.nextIntFromTo(0, 3);
 				}
