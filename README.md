@@ -12,7 +12,7 @@ Optionally, for running the plotting scripts:
 ## Installation
 You have two ways to do it; first one:
 
-1. Download the `installer.jar` file from [this link](https://drive.google.com/file/d/15TYa1B3HanApnJTkXwoHeKTWVrQ3GNu1/view?usp=sharing)
+1. Download the `installer.jar` file from [this link](https://drive.google.com/file/d/16aHYfVXW9Npf1NKRYq2iniWpAWUxKI0d/view?usp=sharing)
 2. Execute it (`java -jar installer.jar`) and follow the installation wizard
 3. Run the `start_model.bat` or `start_model.command` file
 
